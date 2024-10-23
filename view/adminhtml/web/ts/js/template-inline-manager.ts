@@ -1,7 +1,6 @@
 import {PreviewInterface} from "Magento_PageBuilder/js/content-type/preview.types";
 import * as html2canvas from "html2canvas";
 import $t from "mage/translate";
-import $ from "jquery";
 import Config from "Magento_PageBuilder/js/config";
 import {TemplateSavePreviewDataInterface} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager.types";
 import registry from "uiRegistry";
@@ -44,6 +43,7 @@ export default class TemplateInlineManager {
     public static saveAs(preview: PreviewInterface, data: TemplateSavePreviewDataInterface) {
         const capture = TemplateInlineManager.createCapture(preview);
 
+        // noinspection JSVoidFunctionReturnValueUsed
         const prompt = templateManagerSave({
             title: $t("Save Block as Template"),
             promptContentTmpl,
@@ -67,10 +67,22 @@ export default class TemplateInlineManager {
                 confirm(name: string, createdFor: string) {
                     return capture
                         .then(imageEncoded => {
-                            const requestUrl = Config.getConfig('bf__template_save_url');
+                            const requestUrl = new URL(Config.getConfig('bf__template_save_url'));
                             const requestData = {name, createdFor, data, imageEncoded};
 
-                            return $.post(requestUrl, requestData);
+                            // @ts-ignore
+                            requestUrl.searchParams.set('form_key', window.FORM_KEY);
+                            requestUrl.searchParams.set('isAjax', 'true');
+
+                            return fetch(requestUrl.toString(), {
+                                method: 'POST',
+                                body: JSON.stringify(requestData),
+                                headers: new Headers({
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                }),
+                            })
+                                .then(response => response.json())
                         })
                         .then((response: TemplateSaveResponse) => {
                             if (!response.success) {

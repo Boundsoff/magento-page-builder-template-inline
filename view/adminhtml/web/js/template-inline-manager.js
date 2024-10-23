@@ -1,6 +1,6 @@
 /*eslint-disable */
 /* jscs:disable */
-define(["html2canvas", "mage/translate", "jquery", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html"], function (html2canvas, _translate, _jquery, _config, _uiRegistry, _confirmAlert, _templateManagerSave, _saveContentModal) {
+define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html"], function (html2canvas, _translate, _config, _uiRegistry, _confirmAlert, _templateManagerSave, _saveContentModal) {
   function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
   // @ts-ignore
   // @ts-ignore
@@ -30,6 +30,8 @@ define(["html2canvas", "mage/translate", "jquery", "Magento_PageBuilder/js/confi
     };
     TemplateInlineManager.saveAs = function saveAs(preview, data) {
       var capture = TemplateInlineManager.createCapture(preview);
+
+      // noinspection JSVoidFunctionReturnValueUsed
       var prompt = (0, _templateManagerSave)({
         title: (0, _translate)("Save Block as Template"),
         promptContentTmpl: _saveContentModal,
@@ -52,14 +54,27 @@ define(["html2canvas", "mage/translate", "jquery", "Magento_PageBuilder/js/confi
         actions: {
           confirm: function confirm(name, createdFor) {
             return capture.then(function (imageEncoded) {
-              var requestUrl = _config.getConfig('bf__template_save_url');
+              var requestUrl = new URL(_config.getConfig('bf__template_save_url'));
               var requestData = {
                 name: name,
                 createdFor: createdFor,
                 data: data,
                 imageEncoded: imageEncoded
               };
-              return _jquery.post(requestUrl, requestData);
+
+              // @ts-ignore
+              requestUrl.searchParams.set('form_key', window.FORM_KEY);
+              requestUrl.searchParams.set('isAjax', 'true');
+              return fetch(requestUrl.toString(), {
+                method: 'POST',
+                body: JSON.stringify(requestData),
+                headers: new Headers({
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                })
+              }).then(function (response) {
+                return response.json();
+              });
             }).then(function (response) {
               if (!response.success) {
                 var _response$message;
