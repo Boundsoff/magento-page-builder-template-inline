@@ -1,6 +1,6 @@
 /*eslint-disable */
 /* jscs:disable */
-define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html"], function (html2canvas, _translate, _config, _uiRegistry, _confirmAlert, _templateManagerSave, _saveContentModal) {
+define(["html2canvas", "mage/translate", "jquery", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html"], function (html2canvas, _translate, _jquery, _config, _uiRegistry, _confirmAlert, _templateManagerSave, _saveContentModal) {
   function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
   // @ts-ignore
   // @ts-ignore
@@ -28,7 +28,7 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
         return '';
       });
     };
-    TemplateInlineManager.saveAs = function saveAs(preview, data) {
+    TemplateInlineManager.saveAs = function saveAs(preview, component_data) {
       var capture = TemplateInlineManager.createCapture(preview);
 
       // noinspection JSVoidFunctionReturnValueUsed
@@ -52,28 +52,20 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
           "maxlength": "255"
         },
         actions: {
-          confirm: function confirm(name, createdFor) {
-            return capture.then(function (imageEncoded) {
+          confirm: function confirm(name, created_for) {
+            return capture.then(function (preview_image) {
               var requestUrl = new URL(_config.getConfig('bf__template_save_url'));
               var requestData = {
                 name: name,
-                createdFor: createdFor,
-                data: data,
-                imageEncoded: imageEncoded
+                created_for: created_for,
+                component_data: component_data,
+                preview_image: preview_image
               };
-
-              // @ts-ignore
-              requestUrl.searchParams.set('form_key', window.FORM_KEY);
-              requestUrl.searchParams.set('isAjax', 'true');
-              return fetch(requestUrl.toString(), {
+              return _jquery.ajax({
                 method: 'POST',
-                body: JSON.stringify(requestData),
-                headers: new Headers({
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                })
-              }).then(function (response) {
-                return response.json();
+                url: requestUrl.toString(),
+                data: requestData,
+                dataType: 'json'
               });
             }).then(function (response) {
               if (!response.success) {
