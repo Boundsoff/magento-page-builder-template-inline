@@ -28,8 +28,10 @@ define(["html2canvas", "mage/translate", "jquery", "Magento_PageBuilder/js/confi
         return '';
       });
     };
-    TemplateInlineManager.saveAs = function saveAs(preview, data) {
+    TemplateInlineManager.saveAs = function saveAs(preview, component_data) {
       var capture = TemplateInlineManager.createCapture(preview);
+
+      // noinspection JSVoidFunctionReturnValueUsed
       var prompt = (0, _templateManagerSave)({
         title: (0, _translate)("Save Block as Template"),
         promptContentTmpl: _saveContentModal,
@@ -50,16 +52,21 @@ define(["html2canvas", "mage/translate", "jquery", "Magento_PageBuilder/js/confi
           "maxlength": "255"
         },
         actions: {
-          confirm: function confirm(name, createdFor) {
-            return capture.then(function (imageEncoded) {
-              var requestUrl = _config.getConfig('bf__template_save_url');
+          confirm: function confirm(name, created_for) {
+            return capture.then(function (preview_image) {
+              var requestUrl = new URL(_config.getConfig('bf__template_save_url'));
               var requestData = {
                 name: name,
-                createdFor: createdFor,
-                data: data,
-                imageEncoded: imageEncoded
+                created_for: created_for,
+                component_data: component_data,
+                preview_image: preview_image
               };
-              return _jquery.post(requestUrl, requestData);
+              return _jquery.ajax({
+                method: 'POST',
+                url: requestUrl.toString(),
+                data: requestData,
+                dataType: 'json'
+              });
             }).then(function (response) {
               if (!response.success) {
                 var _response$message;

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="bf__pb_template_inline" resource="default" comment="PB Template Inline">
+        <column xsi:type="int" name="model_id" identity="true" comment="Template ID Auto Increment"/>
+        <column xsi:type="varchar" name="name" length="1024" nullable="false" comment="Template Name"/>
+        <column xsi:type="varchar" name="preview_image" nullable="true" length="1024" comment="Template Preview Image"/>
+        <column xsi:type="json" name="component_data" nullable="false" comment="Master Format HTML"/>
+        <column xsi:type="varchar" name="created_for" length="255" nullable="true" comment="Created For"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Update Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="model_id"/>
+        </constraint>
+        <index referenceId="TEMPLATE_NAME_FULLTEXT" indexType="fulltext">
+            <column name="name"/>
+        </index>
+    </table>
+</schema>
