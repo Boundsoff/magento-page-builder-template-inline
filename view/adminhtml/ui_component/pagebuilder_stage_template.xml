@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <modal name="modal_templates" component="Boundsoff_PageBuilderTemplateInline/js/modal/template-list-modal">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="messageContainerProvider" xsi:type="string">${ $.name }.messages</item>
+            </item>
+        </argument>
+        <settings>
+            <options>
+                <option name="title" xsi:type="string" translate="true">Templates</option>
+                <option name="type" xsi:type="string">slide</option>
+                <option name="buttons" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Apply Template</item>
+                        <item name="class" xsi:type="string">action-primary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="string">toggleTemplateManger</item>
+                        </item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="text" xsi:type="string" translate="true">Save as Template</item>
+                        <item name="class" xsi:type="string">action-secondary</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="string">saveAsTemplate</item>
+                        </item>
+                    </item>
+                </option>
+            </options>
+        </settings>
+        <container name="messages" component="Magento_Ui/js/form/components/html" sortOrder="10">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="tracks" xsi:type="array">
+                        <item name="additionalClasses" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </container>
+    </modal>
+</container>

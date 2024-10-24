@@ -11,7 +11,7 @@ export default function (base: typeof Preview) {
             const options = super.retrieveOptions();
             options.template = new Option({
                 preview: this,
-                icon: "<i class='icon-pagebuilder-variable'></i>",
+                icon: "<i class='bf__pb_icons_emoji'>📝</i>",
                 title: $t("Template"),
                 action: this.onTemplate,
                 classes: ["template-structural"],

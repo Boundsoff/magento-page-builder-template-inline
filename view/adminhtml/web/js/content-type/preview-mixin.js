@@ -16,7 +16,7 @@ define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Ma
         var options = _base.prototype.retrieveOptions.call(this);
         options.template = new _option({
           preview: this,
-          icon: "<i class='icon-pagebuilder-variable'></i>",
+          icon: "<i class='bf__pb_icons_emoji'>📝</i>",
           title: (0, _translate)("Template"),
           action: this.onTemplate,
           classes: ["template-structural"],
