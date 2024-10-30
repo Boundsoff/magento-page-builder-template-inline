@@ -8,6 +8,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 class TemplateInline extends AbstractExtensibleModel implements TemplateInlineInterface
 {
     protected $_eventPrefix = 'bf__pb_template_inline';
+    protected $_eventObject = 'template_inline';
 
     protected function _construct()
     {
