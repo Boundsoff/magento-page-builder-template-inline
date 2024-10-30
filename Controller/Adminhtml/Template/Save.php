@@ -129,7 +129,7 @@ class Save implements HttpPostActionInterface
             $mediaDirWrite->getDriver()->filePutContents($fileAbsolutePath, $decodedImage);
             // Generate a thumbnail, called -thumb next to the image for usage in the grid
             $thumbPath = str_replace('.jpg', '-thumb.jpg', $fileName);
-            $thumbAbsolutePath = $directory . $thumbPath;
+            $thumbAbsolutePath = "{$directory}/{$thumbPath}";
             $imageFactory = $this->imageAdapterFactory->create();
             $imageFactory->open($fileAbsolutePath);
             $imageFactory->resize(350);

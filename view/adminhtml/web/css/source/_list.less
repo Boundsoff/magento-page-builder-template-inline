@@ -1,0 +1,25 @@
+.template-inline {
+    &.list-items {
+        list-style: none;
+    }
+
+    & .item-info {
+        display: flex;
+        flex-flow: column nowrap;
+        row-gap: @indent__xs;
+
+        .data-grid-cell-content {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+
+            & *:first-child {
+                font-weight: bold;
+
+                &:after {
+                    content: ':';
+                }
+            }
+        }
+    }
+}
