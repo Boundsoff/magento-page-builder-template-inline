@@ -14,12 +14,7 @@
             <dep>pagebuilder_stage_template_list.pagebuilder_stage_template_list_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="pagebuilder_stage_template_list_data_source">
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
+    <dataSource name="pagebuilder_stage_template_list_data_source" component="Boundsoff_PageBuilderTemplateInline/js/list/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">model_id</param>
@@ -58,14 +53,6 @@
                 <visible>false</visible>
             </settings>
         </column>
-        <column name="name" sortOrder="20">
-            <settings>
-                <bodyTmpl>Boundsoff_PageBuilderTemplateInline/list/cells/text</bodyTmpl>
-                <label translate="true">Template Name</label>
-                <draggable>false</draggable>
-                <sortable>false</sortable>
-            </settings>
-        </column>
         <column name="preview_image" class="Magento\PageBuilder\Ui\Component\Listing\Columns\PreviewImage"
                 component="Magento_PageBuilder/js/grid/columns/preview-image" sortOrder="30">
             <settings>
@@ -77,7 +64,15 @@
                 <draggable>false</draggable>
             </settings>
         </column>
-        <column name="created_for" component="Magento_Ui/js/grid/columns/select" sortOrder="40">
+        <column name="name" sortOrder="40">
+            <settings>
+                <bodyTmpl>Boundsoff_PageBuilderTemplateInline/list/cells/text</bodyTmpl>
+                <label translate="true">Template Name</label>
+                <draggable>false</draggable>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="created_for" component="Magento_Ui/js/grid/columns/select" sortOrder="50">
             <settings>
                 <options class="Magento\PageBuilder\Model\Template\Source\TemplateTypes"/>
                 <label translate="true">Created For</label>
@@ -87,23 +82,26 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <actionsColumn name="actions_right" sortOrder="50" displayArea="top-right">
+        <actionsColumn name="actions" sortOrder="60">
             <settings>
                 <indexField>model_id</indexField>
+                <bodyTmpl>Boundsoff_PageBuilderTemplateInline/list/cells/actions</bodyTmpl>
                 <templates>
                     <actions>
                         <action name="delete">
                             <label translate="true">Delete</label>
+                            <confirm>
+                                <title translate="true">Delete template</title>
+                                <message translate="true">
+                                    This template will be deleted permanently,
+                                    do U want to continue?
+                                </message>
+                            </confirm>
+                            <callback>
+                                <provider>pagebuilder_stage_template_list.pagebuilder_stage_template_list_data_source</provider>
+                                <target>onDelete</target>
+                            </callback>
                         </action>
-                    </actions>
-                </templates>
-            </settings>
-        </actionsColumn>
-        <actionsColumn name="actions_bottom" sortOrder="60" displayArea="bottom-middle">
-            <settings>
-                <indexField>model_id</indexField>
-                <templates>
-                    <actions>
                         <action name="apply">
                             <label translate="true">Apply</label>
                         </action>
