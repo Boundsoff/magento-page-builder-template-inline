@@ -104,6 +104,10 @@
                         </action>
                         <action name="apply">
                             <label translate="true">Apply</label>
+                            <callback>
+                                <provider>pagebuilder_stage_template_list.pagebuilder_stage_template_list_data_source</provider>
+                                <target>onApply</target>
+                            </callback>
                         </action>
                     </actions>
                 </templates>

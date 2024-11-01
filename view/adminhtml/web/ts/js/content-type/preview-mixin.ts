@@ -9,6 +9,7 @@ export default function (base: typeof Preview) {
     return class PreviewMixin extends base {
         protected retrieveOptions(): OptionsInterface {
             const options = super.retrieveOptions();
+
             options.template = new Option({
                 preview: this,
                 icon: "<i class='bf__pb_icons_emoji'>📝</i>",
@@ -18,7 +19,7 @@ export default function (base: typeof Preview) {
                 sort: 55,
             })
 
-            return options;
+            return options
         }
 
         public onTemplate(): void {

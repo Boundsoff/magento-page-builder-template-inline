@@ -41,9 +41,7 @@ class Save implements HttpPostActionInterface
         $createdFor = (string)$this->request->getParam(TemplateInlineInterface::KEY_CREATED_FOR);
         $componentData = (array)$this->request->getParam(TemplateInlineInterface::KEY_COMPONENT_DATA);
 
-        array_walk_recursive($componentData, function (&$item) {
-            $item = $this->escaper->escapeJs($item);
-        });
+        // @todo escaper is causing issues with structure data
 
         $templateInline = $this->templateInlineRepository->new();
         $templateInline->setName($name);
