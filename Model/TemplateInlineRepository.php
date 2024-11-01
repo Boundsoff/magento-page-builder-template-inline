@@ -12,6 +12,9 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 
 class TemplateInlineRepository implements TemplateInlineRepositoryInterface
 {
@@ -55,16 +58,29 @@ class TemplateInlineRepository implements TemplateInlineRepositoryInterface
             ->save($model);
     }
 
-    public function getList(SearchCriteriaInterface $searchCriteria): TemplateInlineSearchResultsInterface
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
 
-        /** @var TemplateInlineSearchResultsInterface $searchResults */
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
         return $searchResults;
+    }
+
+    public function deleteById(int $modelId): void
+    {
+        $collection = $this->collectionFactory->create();
+        $model = $this->getById($modelId);
+        if (empty($model)) {
+            $fieldName = $collection->getResource()
+                ->getIdFieldName();
+
+            throw NoSuchEntityException::singleField($fieldName, $modelId);
+        }
+        $collection->getResource()
+            ->delete($model);
     }
 }

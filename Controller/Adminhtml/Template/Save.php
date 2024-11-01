@@ -21,15 +21,15 @@ use Psr\Log\LoggerInterface;
 class Save implements HttpPostActionInterface
 {
     public function __construct(
-        protected TemplateInlineRepositoryInterface $templateInlineRepository,
-        protected RequestInterface                  $request,
-        protected ResultFactory                     $resultFactory,
-        protected Escaper                           $escaper,
-        protected Filesystem                        $filesystem,
-        protected ImageContentValidator             $imageContentValidator,
-        protected ImageContentFactory               $imageContentFactory,
-        protected AdapterFactory                    $imageAdapterFactory,
-        protected LoggerInterface                   $logger,
+        protected readonly TemplateInlineRepositoryInterface $templateInlineRepository,
+        protected readonly RequestInterface                  $request,
+        protected readonly ResultFactory                     $resultFactory,
+        protected readonly Escaper                           $escaper,
+        protected readonly Filesystem                        $filesystem,
+        protected readonly ImageContentValidator             $imageContentValidator,
+        protected readonly ImageContentFactory               $imageContentFactory,
+        protected readonly AdapterFactory                    $imageAdapterFactory,
+        protected readonly LoggerInterface                   $logger,
     )
     {
     }

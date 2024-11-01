@@ -5,6 +5,8 @@ namespace Boundsoff\PageBuilderTemplateInline\Api;
 use Boundsoff\PageBuilderTemplateInline\Api\Data\TemplateInlineInterface;
 use Boundsoff\PageBuilderTemplateInline\Api\Data\TemplateInlineSearchResultsInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  *
@@ -32,5 +34,14 @@ interface TemplateInlineRepositoryInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return TemplateInlineSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $searchCriteria): TemplateInlineSearchResultsInterface;
+    public function getList(SearchCriteriaInterface $searchCriteria);
+
+    /**
+     * @param int $modelId
+     * @return void
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     * @throws \Exception
+     */
+    public function deleteById(int $modelId): void;
 }

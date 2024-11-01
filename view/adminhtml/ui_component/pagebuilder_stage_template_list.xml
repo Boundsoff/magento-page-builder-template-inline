@@ -14,12 +14,7 @@
             <dep>pagebuilder_stage_template_list.pagebuilder_stage_template_list_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="pagebuilder_stage_template_list_data_source">
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
+    <dataSource name="pagebuilder_stage_template_list_data_source" component="Boundsoff_PageBuilderTemplateInline/js/list/provider">
         <settings>
             <storageConfig>
                 <param name="indexField" xsi:type="string">model_id</param>
@@ -87,8 +82,7 @@
                 <sortable>false</sortable>
             </settings>
         </column>
-        <actionsColumn name="actions" component="Boundsoff_PageBuilderTemplateInline/js/list/columns/actions"
-                       sortOrder="60">
+        <actionsColumn name="actions" sortOrder="60">
             <settings>
                 <indexField>model_id</indexField>
                 <bodyTmpl>Boundsoff_PageBuilderTemplateInline/list/cells/actions</bodyTmpl>
@@ -103,7 +97,10 @@
                                     do U want to continue?
                                 </message>
                             </confirm>
-                            <href>bf-pb-template-inline/template/delete/:indexField</href>
+                            <callback>
+                                <provider>pagebuilder_stage_template_list.pagebuilder_stage_template_list_data_source</provider>
+                                <target>onDelete</target>
+                            </callback>
                         </action>
                         <action name="apply">
                             <label translate="true">Apply</label>
