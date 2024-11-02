@@ -5,6 +5,10 @@
     "keywords": ["magento", "pagebuilder", "cms", "adobe commerce"],
     "homepage": "https://github.com/none-life/magento-page-builder-template-inline",
     "license": "MIT",
+    "dist": {
+        "url": "https://github.com/none-life/magento-page-builder-template-inline/releases/download/v0.8.0-alpha/dist.zip",
+        "type": "zip"
+    },
     "authors": [
         {
             "name": "Kamil Wiśniowski",
