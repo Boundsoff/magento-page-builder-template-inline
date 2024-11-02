@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "magento/page-builder": "~1.7.4-p3"
+        "magento/page-builder": "1.7.*"
     },
     "autoload": {
         "files": [
