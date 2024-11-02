@@ -16,6 +16,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 class Save implements HttpPostActionInterface
@@ -30,16 +31,20 @@ class Save implements HttpPostActionInterface
         protected readonly ImageContentFactory               $imageContentFactory,
         protected readonly AdapterFactory                    $imageAdapterFactory,
         protected readonly LoggerInterface                   $logger,
+        protected readonly SerializerInterface               $serializer,
     )
     {
     }
 
     public function execute()
     {
-        $name = (string)$this->request->getParam(TemplateInlineInterface::KEY_NAME);
-        $previewImage = (string)$this->request->getParam(TemplateInlineInterface::KEY_PREVIEW_IMAGE);
-        $createdFor = (string)$this->request->getParam(TemplateInlineInterface::KEY_CREATED_FOR);
-        $componentData = (array)$this->request->getParam(TemplateInlineInterface::KEY_COMPONENT_DATA);
+        /** @var \stdClass $data */
+        $data = $this->serializer->unserialize(file_get_contents('php://input'));
+
+        $name = (string)$data[TemplateInlineInterface::KEY_NAME];
+        $previewImage = (string)$data[TemplateInlineInterface::KEY_PREVIEW_IMAGE];
+        $createdFor = (string)$data[TemplateInlineInterface::KEY_CREATED_FOR];
+        $componentData = (array)$data[TemplateInlineInterface::KEY_COMPONENT_DATA];
 
         // @todo escaper is causing issues with structure data
 

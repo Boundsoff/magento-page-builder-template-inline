@@ -5,4 +5,5 @@ export interface TemplateSavePreviewDataInterface {
     config: ContentTypeConfigInterface;
     contentTypeData: DataObject;
     dataStoresStates: { [key: string]: any };
+    children: TemplateSavePreviewDataInterface[];
 }

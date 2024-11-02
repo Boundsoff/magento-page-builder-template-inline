@@ -3,6 +3,7 @@ import events from "Magento_PageBuilder/js/events";
 import {TemplateSavePreviewDataInterface} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager.types";
 import createContentType from "Magento_PageBuilder/js/content-type-factory";
 import ContentTypeInterface from "Magento_PageBuilder/js/content-type.types";
+import ContentTypeCollectionInterface from "Magento_PageBuilder/js/content-type-collection.types";
 
 type TemplateModel = object & { component_data: TemplateSavePreviewDataInterface }
 
@@ -31,19 +32,38 @@ export default function (base: typeof PageBuilder) {
             }
         }
 
-        public templateApply({ model } : { model: TemplateModel}) {
-            return createContentType(
-                model.component_data.config,
-                this.stage.rootContainer,
-                this.stage.id,
-                model.component_data.contentTypeData,
-                0,
-                model.component_data.dataStoresStates,
-            ).then((duplicateContentType: ContentTypeInterface) => {
-                this.stage.rootContainer.addChild(duplicateContentType);
+        public templateApply({model}: { model: TemplateModel }) {
+            return this.templateApplyChild(this.stage.rootContainer, model.component_data)
+                .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
+                    this.stage.rootContainer.addChild(templateContentType);
+                })
+        }
 
-                return duplicateContentType;
-            });
+        protected templateApplyChild(
+            parent: ContentTypeInterface & ContentTypeCollectionInterface,
+            child: TemplateSavePreviewDataInterface,
+        ): Promise<ContentTypeInterface & ContentTypeCollectionInterface> {
+            return createContentType(
+                child.config,
+                parent,
+                this.stage.id,
+                child.contentTypeData,
+                child.children.length,
+                child.dataStoresStates,
+            )
+                .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
+                    return Promise.all(
+                        child.children.map((child, index) => {
+                            return this.templateApplyChild(templateContentType, child)
+                                .then((content: ContentTypeInterface) => {
+                                    templateContentType.addChild(content, index);
+                                })
+                        })
+                    )
+                        .then(() => {
+                            return templateContentType;
+                        })
+                });
         }
     }
 }
