@@ -1,7 +1,6 @@
 {
   "name": "@boundsoff/module-page-builder-template-inline",
-  "version": "0.0.1",
-  "description": "TBD",
+  "description": "Magento 2 module for page builder to save and apply templates with each block",
   "repository": {
     "type": "git",
     "url": "https://github.com/none-life/magento-page-builder-template-inline.git"
