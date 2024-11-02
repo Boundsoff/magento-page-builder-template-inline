@@ -6,6 +6,7 @@ use Boundsoff\PageBuilderTemplateInline\Model\ResourceModel\TemplateInline;
 use Boundsoff\PageBuilderTemplateInline\Model\ResourceModel\TemplateInline\Collection as CollectionParent;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
 
 class Collection extends CollectionParent implements SearchResultInterface
@@ -50,6 +51,11 @@ class Collection extends CollectionParent implements SearchResultInterface
     }
 
     public function setTotalCount($totalCount)
+    {
+        return $this;
+    }
+
+    protected function beforeAddLoadedItem(DataObject $item)
     {
         return $this;
     }

@@ -7,35 +7,45 @@ define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Ma
     return /*#__PURE__*/function (_base) {
       "use strict";
 
-      function PreviewMixin() {
+      function _class() {
         return _base.apply(this, arguments) || this;
       }
-      _inheritsLoose(PreviewMixin, _base);
-      var _proto = PreviewMixin.prototype;
+      _inheritsLoose(_class, _base);
+      var _proto = _class.prototype;
       _proto.retrieveOptions = function retrieveOptions() {
         var options = _base.prototype.retrieveOptions.call(this);
-        options.template = new _option({
-          preview: this,
-          icon: "<i class='bf__pb_icons_emoji'>📝</i>",
-          title: (0, _translate)("Template"),
-          action: this.onTemplate,
-          classes: ["template-structural"],
-          sort: 55
-        });
+
+        // @todo only rows are now supported
+        if (this.contentType.config.name === 'row') {
+          options.template = new _option({
+            preview: this,
+            icon: "<i class='bf__pb_icons_emoji'>📝</i>",
+            title: (0, _translate)("Template"),
+            action: this.onTemplate,
+            classes: ["template-structural"],
+            sort: 55
+          });
+        }
         return options;
       };
       _proto.onTemplate = function onTemplate() {
+        var componentData = this.getTemplateData();
+        _templateInlineManager.saveAs(this, componentData);
+      };
+      _proto.getTemplateData = function getTemplateData() {
         var config = this.contentType.config;
         var defaultViewport = _config.getConfig("defaultViewport");
         var contentTypeData = this.contentType.dataStores[defaultViewport].getState();
         var dataStoresStates = this.contentType.getDataStoresStates();
-        _templateInlineManager.saveAs(this, {
+        var children = [];
+        return {
           config: config,
           contentTypeData: contentTypeData,
-          dataStoresStates: dataStoresStates
-        });
+          dataStoresStates: dataStoresStates,
+          children: children
+        };
       };
-      return PreviewMixin;
+      return _class;
     }(base);
   }
   return _default;

@@ -38,5 +38,12 @@ define([
         saveAsTemplate() {
             events.trigger(`stage:templateManager:save`);
         },
+
+        applyTemplate(model) {
+            this.closeModal();
+            events.trigger(`stage:${this.stage.id}:template:apply`, {
+                model,
+            });
+        },
     });
 });

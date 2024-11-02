@@ -71,12 +71,19 @@ export default class TemplateInlineManager {
                             const requestUrl = new URL(Config.getConfig('bf__template_save_url'));
                             const requestData = {name, created_for, component_data, preview_image};
 
-                            return $.ajax({
+                            // @ts-ignore
+                            requestUrl.searchParams.set('form_key', window.FORM_KEY);
+                            requestUrl.searchParams.set('isAjax', 'true');
+
+                            return fetch(requestUrl.toString(), {
                                 method: 'POST',
-                                url: requestUrl.toString(),
-                                data: requestData,
-                                dataType: 'json',
+                                body: JSON.stringify(requestData),
+                                headers: new Headers({
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                }),
                             })
+                                .then(response => response.json());
                         })
                         .then((response: TemplateSaveResponse) => {
                             if (!response.success) {
