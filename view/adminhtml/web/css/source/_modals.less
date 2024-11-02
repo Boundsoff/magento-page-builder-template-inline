@@ -1,0 +1,37 @@
+.content-fit {
+    &.modal-slide {
+        width: max-content;
+        margin-left: auto;
+
+        .modal-header {
+            padding-left: 0;
+            padding-right: 0;
+
+            .modal-title {
+                .lib-css(padding-left, @modal-slide__padding);
+            }
+        }
+    }
+
+    & .item-info {
+        margin-bottom: @indent__s;
+    }
+
+    & .page-main-actions {
+        .page-actions {
+            @_page-action__indent: 1.3rem; // vendor/magento/theme-adminhtml-backend/Magento_Backend/web/css/source/module/main/_actions-bar.less:54
+            margin: 0;
+
+            .page-actions-buttons {
+                display: flex;
+                flex-flow: row;
+                justify-content: space-between;
+                column-gap: @_page-action__indent;
+
+                button {
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,9 @@
+<ol class="list-items template-inline">
+    <li class="list-item" repeat="foreach: rows, item: '$row'">
+        <div class="item-info">
+            <!--ko foreach: {data: getVisible(), as: '$col'}-->
+            <!-- ko template: getBody() --><!-- /ko -->
+            <!-- /ko -->
+        </div>
+    </li>
+</ol>

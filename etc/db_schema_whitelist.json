@@ -1,0 +1,19 @@
+{
+    "bf__pb_template_inline": {
+        "column": {
+            "model_id": true,
+            "name": true,
+            "preview_image": true,
+            "component_data": true,
+            "created_for": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "BF__PB_TEMPLATE_INLINE_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

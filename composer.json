@@ -1,0 +1,27 @@
+{
+    "name": "boundsoff/module-page-builder-template-inline",
+    "description": "Magento 2 module for page builder to save and apply templates with each block",
+    "type": "magento2-module",
+    "keywords": ["magento", "pagebuilder", "cms", "adobe commerce"],
+    "homepage": "https://github.com/none-life/magento-page-builder-template-inline",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kamil Wiśniowski",
+            "email": "kwisniowski@boundsoff.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "magento/page-builder": "~1.7.4-p3"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Boundsoff\\PageBuilderTemplateInline\\": ""
+        }
+    }
+}
+
