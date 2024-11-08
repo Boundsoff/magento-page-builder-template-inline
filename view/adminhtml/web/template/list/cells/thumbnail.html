@@ -1,1 +1,7 @@
-<img class="admin__control-thumbnail" attr="src: $col.getSrc($row()), alt: $col.getAlt($row())" loading="lazy"/>
+<span data-bind="draggable: dragAndApply($row())">
+    <img
+        class="admin__control-thumbnail"
+        attr="src: $col.getSrc($row()), alt: $col.getAlt($row())"
+        loading="lazy"
+    />
+</span>
