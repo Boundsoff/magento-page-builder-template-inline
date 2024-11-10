@@ -19,8 +19,8 @@ define([
     'use strict';
 
     const {hideDropIndicators, showDropIndicators} = dropIndicators;
-    const {getAllowedContainersClasses} = dropMatrix;
     const {setDraggedContentTypeConfig} = dropRegistry;
+    const {getAllowedContainersClasses} = dropMatrix;
 
     // noinspection JSUnusedGlobalSymbols
     return ColumnPreviewImage.extend({
@@ -30,12 +30,12 @@ define([
                 component_data: JSON.parse($row.component_data),
             };
             const modal = registry.get('pagebuilder_stage_template.pagebuilder_stage_template.modal_templates');
-            const self = this;
+            const connectToSortable = getAllowedContainersClasses(row.component_data.config.name, modal.stage.id);
 
             return {
                 appendTo: "body",
                 cursor: "-webkit-grabbing",
-                connectToSortable: ".content-type-drop",
+                connectToSortable,
                 containment: "document",
                 scroll: true,
                 helper() {
@@ -47,37 +47,31 @@ define([
                             pointerEvents: "none",
                         });
                 },
-                start() {
-                    self.onDragStart.apply(self, [this, row, modal]);
-                },
-                stop() {
-                    self.onDragStop.apply(self, [this, row, modal]);
-                },
+                start: this.onDragStart.bind(this, row, modal),
+                stop: this.onDragStop.bind(this, row, modal),
             };
         },
-        onDragStart(sortable, row, modal) {
+        onDragStart(row, modal) {
             modal.closeModal();
 
-            $(".content-type-container.ui-sortable").each(function() {
+            $(".content-type-container.ui-sortable").each(function () {
                 if ($(this).data("ui-sortable")) {
                     $(this).sortable("option", "tolerance", "intersect");
                 }
             });
 
-            showDropIndicators(row.component_data.config.name, modal.stage.stageId);
-            setDraggedContentTypeConfig(row.component_data.config);
+            showDropIndicators(row.component_data.config.name, modal.stage.id);
             events.trigger("stage:interactionStart", {stage: modal.stage});
+            // @todo need to inject into sortable.ts
         },
-        onDragStop(sortable, row, modal) {
-            $(".content-type-container.ui-sortable").each(function() {
+        onDragStop(row, modal) {
+            $(".content-type-container.ui-sortable").each(function () {
                 if ($(this).data("ui-sortable")) {
                     $(this).sortable("option", "tolerance", "pointer");
                 }
             });
 
             hideDropIndicators();
-            setDraggedContentTypeConfig(null);
-
             events.trigger("stage:interactionStop", {stage: modal.stage});
         },
     });
