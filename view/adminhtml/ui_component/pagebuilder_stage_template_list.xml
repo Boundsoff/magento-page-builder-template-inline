@@ -21,7 +21,6 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <!--        <aclResource> @todo </aclResource>-->
         <dataProvider class="Magento\PageBuilder\Ui\Component\Template\DataProvider"
                       name="pagebuilder_stage_template_list_data_source">
             <settings>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="bf__pb_template_inline_save_before">
+        <observer name="check_acl"
+                  instance="Boundsoff\PageBuilderTemplateInline\Observer\CheckModelAcl" shared="true"/>
+    </event>
+    <event name="bf__pb_template_inline_delete_before">
+        <observer name="check_acl"
+                  instance="Boundsoff\PageBuilderTemplateInline\Observer\CheckModelAcl" shared="true"/>
+    </event>
+</config>

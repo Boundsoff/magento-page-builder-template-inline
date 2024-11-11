@@ -8,6 +8,7 @@
   "author": "Kamil Wiśniowski <kwisniowski@boundsoff.com>",
   "scripts": {
     "ts:build": "babel view/adminhtml/web/ts/js/ --out-dir view/adminhtml/web/js/ --extensions '.ts,.tsx' --source-maps",
+    "ts:build:prod": "babel view/adminhtml/web/ts/js/ --out-dir view/adminhtml/web/js/ --extensions '.ts,.tsx'",
     "ts:watch": "npm run ts:build -- --watch"
   },
   "devDependencies": {

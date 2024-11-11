@@ -4,17 +4,33 @@ import {TemplateSavePreviewDataInterface} from "Boundsoff_PageBuilderTemplateInl
 import createContentType from "Magento_PageBuilder/js/content-type-factory";
 import ContentTypeInterface from "Magento_PageBuilder/js/content-type.types";
 import ContentTypeCollectionInterface from "Magento_PageBuilder/js/content-type-collection.types";
+import {isAllowed} from "Magento_PageBuilder/js/acl";
+import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
+import alertDialog from "Magento_Ui/js/modal/alert";
 
 type TemplateModel = object & { component_data: TemplateSavePreviewDataInterface }
-type TemplateApply = { model: TemplateModel, index?: number, contentType?: ContentTypeInterface & ContentTypeCollectionInterface }
+type TemplateApply = {
+    model: TemplateModel,
+    index?: number,
+    contentType?: ContentTypeInterface & ContentTypeCollectionInterface
+}
 
 export default function (base: typeof PageBuilder) {
     return class PageBuilderMixin extends base {
-        template: string = 'Boundsoff_PageBuilderTemplateInline/page-builder'
+        public template: string = 'Boundsoff_PageBuilderTemplateInline/page-builder'
+        public readonly shouldShowDropZone: KnockoutComputed<boolean>;
+        protected readonly canApplyInlineTemplates: boolean;
+
+        constructor(config: any, initialValue: string) {
+            super(config, initialValue);
+
+            this.canApplyInlineTemplates = isAllowed(resources.TEMPLATE_INLINE_APPLY);
+            this.shouldShowDropZone = ko.computed(() => {
+                return this.stage.interacting() && this.canApplyInlineTemplates;
+            });
+        }
 
         public toggleTemplateList() {
-            // @todo add ACL
-
             events.trigger('stage:templateList:open', {
                 stage: this.stage,
             });
@@ -40,6 +56,14 @@ export default function (base: typeof PageBuilder) {
         }
 
         public templateApply({model, index, contentType}: TemplateApply) {
+            if (!this.canApplyInlineTemplates) {
+                alertDialog({
+                    content: $t("You do not have permission to apply inline templates."),
+                    title: $t("Permission Error"),
+                });
+                return;
+            }
+
             const parent = contentType || this.stage.rootContainer;
 
             return this.templateApplyChild(parent, model.component_data)
