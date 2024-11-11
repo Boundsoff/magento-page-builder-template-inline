@@ -11,6 +11,8 @@ import alertDialog from 'Magento_PageBuilder/js/modal/confirm-alert';
 import templateManagerSave from "Magento_PageBuilder/js/modal/template-manager-save";
 // @ts-ignore
 import promptContentTmpl from 'text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html';
+import {isAllowed} from "Magento_PageBuilder/js/acl";
+import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
 
 type TemplateSaveResponse = { success: boolean, message?: String }
 
@@ -42,6 +44,14 @@ export default class TemplateInlineManager {
     }
 
     public static saveAs(preview: PreviewInterface, component_data: TemplateSavePreviewDataInterface) {
+        if (!isAllowed(resources.TEMPLATE_INLINE_SAVE)) {
+            alertDialog({
+                content: $t("You do not have permission to save inline templates."),
+                title: $t("Permission Error"),
+            });
+            return;
+        }
+
         // delay for better render
         const capture = new Promise(resolve => setTimeout(resolve, 1000))
             .then(() => TemplateInlineManager.createCapture(preview))

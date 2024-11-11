@@ -1,6 +1,6 @@
 /*eslint-disable */
 /* jscs:disable */
-define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/events", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html"], function (html2canvas, _translate, _config, _uiRegistry, _events, _confirmAlert, _templateManagerSave, _saveContentModal) {
+define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/events", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html", "Magento_PageBuilder/js/acl", "Boundsoff_PageBuilderTemplateInline/js/acl"], function (html2canvas, _translate, _config, _uiRegistry, _events, _confirmAlert, _templateManagerSave, _saveContentModal, _acl, _acl2) {
   function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
   // @ts-ignore
   // @ts-ignore
@@ -29,6 +29,14 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
       });
     };
     TemplateInlineManager.saveAs = function saveAs(preview, component_data) {
+      if (!(0, _acl.isAllowed)(_acl2.resources.TEMPLATE_INLINE_SAVE)) {
+        (0, _confirmAlert)({
+          content: (0, _translate)("You do not have permission to save inline templates."),
+          title: (0, _translate)("Permission Error")
+        });
+        return;
+      }
+
       // delay for better render
       var capture = new Promise(function (resolve) {
         return setTimeout(resolve, 1000);
@@ -125,4 +133,3 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
   }();
   return TemplateInlineManager;
 });
-//# sourceMappingURL=template-inline-manager.js.map
