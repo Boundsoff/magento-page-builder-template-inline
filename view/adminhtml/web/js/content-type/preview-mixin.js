@@ -14,18 +14,14 @@ define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Ma
       var _proto = _class.prototype;
       _proto.retrieveOptions = function retrieveOptions() {
         var options = _base.prototype.retrieveOptions.call(this);
-
-        // @todo only rows are now supported
-        if (this.contentType.config.name === 'row') {
-          options.template = new _option({
-            preview: this,
-            icon: "<i class='bf__pb_icons_emoji'>📝</i>",
-            title: (0, _translate)("Template"),
-            action: this.onTemplate,
-            classes: ["template-structural"],
-            sort: 55
-          });
-        }
+        options.template = new _option({
+          preview: this,
+          icon: "<i class='bf__pb_icons_emoji'>📝</i>",
+          title: (0, _translate)("Template"),
+          action: this.onTemplate,
+          classes: ["template-structural"],
+          sort: 55
+        });
         return options;
       };
       _proto.onTemplate = function onTemplate() {
