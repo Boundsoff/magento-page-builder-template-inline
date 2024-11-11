@@ -6,11 +6,22 @@ define([
 ], function (Provider, registry, events, urlBuild) {
     'use strict';
 
-    // @todo add event listener for adding new items to refresh
-
     return Provider.extend({
+        initialize() {
+            this._super();
+
+            events.on('templates:save:successful', () => {
+                this.clearData()
+                    .reload({refresh: true});
+            });
+
+            return this;
+        },
+
         onDelete(target, recordId) {
-            if (!events.trigger('templates:delete:before', {provider: this, arguments})) {
+            const eventParams = {provider: this, arguments, shouldContinue: true};
+            events.trigger('templates:delete:before', eventParams);
+            if (!eventParams.shouldContinue) {
                 return;
             }
 
@@ -18,7 +29,7 @@ define([
             fetch(url)
                 .then(() => {
                     this.clearData()
-                        .reload({ refresh: true });
+                        .reload({refresh: true});
 
                     events.trigger('templates:delete:after', {provider: this, arguments});
                 });
