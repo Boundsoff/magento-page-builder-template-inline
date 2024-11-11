@@ -47,6 +47,13 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
         var parent = contentType || this.stage.rootContainer;
         return this.templateApplyChild(parent, model.component_data).then(function (templateContentType) {
           parent.addChild(templateContentType, index);
+          var eventData = {
+            templateContentType: templateContentType,
+            model: model,
+            parent: parent
+          };
+          _events.trigger("templates:apply:successfully", eventData);
+          _events.trigger("templates:apply:successfully:" + templateContentType.config.name, eventData);
         });
       };
       _proto.templateApplyChild = function templateApplyChild(parent, child) {
