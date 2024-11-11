@@ -38,17 +38,19 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
         }
       };
       _proto.templateApply = function templateApply(_ref) {
-        var _this3 = this;
-        var model = _ref.model;
-        return this.templateApplyChild(this.stage.rootContainer, model.component_data).then(function (templateContentType) {
-          _this3.stage.rootContainer.addChild(templateContentType);
+        var model = _ref.model,
+          index = _ref.index,
+          contentType = _ref.contentType;
+        var parent = contentType || this.stage.rootContainer;
+        return this.templateApplyChild(parent, model.component_data).then(function (templateContentType) {
+          parent.addChild(templateContentType, index);
         });
       };
       _proto.templateApplyChild = function templateApplyChild(parent, child) {
-        var _this4 = this;
+        var _this3 = this;
         return (0, _contentTypeFactory)(child.config, parent, this.stage.id, child.contentTypeData, child.children.length, child.dataStoresStates).then(function (templateContentType) {
           return Promise.all(child.children.map(function (child, index) {
-            return _this4.templateApplyChild(templateContentType, child).then(function (content) {
+            return _this3.templateApplyChild(templateContentType, child).then(function (content) {
               templateContentType.addChild(content, index);
             });
           })).then(function () {

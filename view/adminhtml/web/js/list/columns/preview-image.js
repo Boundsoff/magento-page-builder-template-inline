@@ -5,7 +5,7 @@ define([
     'Magento_PageBuilder/js/events',
     'Magento_PageBuilder/js/drag-drop/drop-indicators',
     'Magento_PageBuilder/js/drag-drop/matrix',
-    'Magento_PageBuilder/js/drag-drop/registry',
+    'Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry',
     'Magento_PageBuilder/js/binding/draggable',
 ], function (
     $,
@@ -19,8 +19,8 @@ define([
     'use strict';
 
     const {hideDropIndicators, showDropIndicators} = dropIndicators;
-    const {setDraggedContentTypeConfig} = dropRegistry;
     const {getAllowedContainersClasses} = dropMatrix;
+    const {setDraggedTemplateModelData} = dropRegistry;
 
     // noinspection JSUnusedGlobalSymbols
     return ColumnPreviewImage.extend({
@@ -40,6 +40,7 @@ define([
                 scroll: true,
                 helper() {
                     return $(this).clone()
+                        .addClass('pagebuilder-draggable-content-type')
                         .css({
                             width: $(this).width(),
                             height: $(this).height(),
@@ -62,7 +63,7 @@ define([
 
             showDropIndicators(row.component_data.config.name, modal.stage.id);
             events.trigger("stage:interactionStart", {stage: modal.stage});
-            // @todo need to inject into sortable.ts
+            setDraggedTemplateModelData({ model: row, stage: modal.stage });
         },
         onDragStop(row, modal) {
             $(".content-type-container.ui-sortable").each(function () {
@@ -71,8 +72,9 @@ define([
                 }
             });
 
-            hideDropIndicators();
+            setDraggedTemplateModelData(null);
             events.trigger("stage:interactionStop", {stage: modal.stage});
+            hideDropIndicators();
         },
     });
 })

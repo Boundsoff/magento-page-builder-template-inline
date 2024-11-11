@@ -16,17 +16,14 @@ export default function (base: typeof Preview) {
         protected retrieveOptions(): OptionsInterface {
             const options = super.retrieveOptions();
 
-            // @todo only rows are now supported
-            if (this.contentType.config.name === 'row') {
-                options.template = new Option({
-                    preview: this,
-                    icon: "<i class='bf__pb_icons_emoji'>📝</i>",
-                    title: $t("Template"),
-                    action: this.onTemplate,
-                    classes: ["template-structural"],
-                    sort: 55,
-                });
-            }
+            options.template = new Option({
+                preview: this,
+                icon: "<i class='bf__pb_icons_emoji'>📝</i>",
+                title: $t("Template"),
+                action: this.onTemplate,
+                classes: ["template-structural"],
+                sort: 55,
+            });
 
             return options
         }
