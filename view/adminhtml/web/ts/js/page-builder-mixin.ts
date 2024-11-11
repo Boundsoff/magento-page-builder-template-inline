@@ -45,6 +45,10 @@ export default function (base: typeof PageBuilder) {
             return this.templateApplyChild(parent, model.component_data)
                 .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
                     parent.addChild(templateContentType, index);
+
+                    const eventData = {templateContentType, model, parent};
+                    events.trigger("templates:apply:successfully", eventData);
+                    events.trigger(`templates:apply:successfully:${templateContentType.config.name}`, eventData);
                 })
         }
 

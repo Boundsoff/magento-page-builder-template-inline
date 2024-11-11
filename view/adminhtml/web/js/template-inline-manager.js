@@ -1,6 +1,6 @@
 /*eslint-disable */
 /* jscs:disable */
-define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html"], function (html2canvas, _translate, _config, _uiRegistry, _confirmAlert, _templateManagerSave, _saveContentModal) {
+define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/events", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html"], function (html2canvas, _translate, _config, _uiRegistry, _events, _confirmAlert, _templateManagerSave, _saveContentModal) {
   function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
   // @ts-ignore
   // @ts-ignore
@@ -85,12 +85,21 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
                 var _response$message;
                 throw new Error(((_response$message = response.message) == null ? void 0 : _response$message.toString()) || 'Unknown error');
               }
+              _events.trigger('templates:save:successful', {
+                response: response
+              });
               (0, _confirmAlert)({
                 content: (0, _translate)("Block has been successfully saved as a template."),
                 title: (0, _translate)("Template Saved")
               });
               TemplateInlineManager.refreshGrid();
             }).catch(function (error) {
+              _events.trigger('templates:save:error', {
+                error: error,
+                name: name,
+                created_for: created_for,
+                component_data: component_data
+              });
               (0, _confirmAlert)({
                 content: error.message || (0, _translate)("An issue occurred while attempting to save " + "the template, please try again."),
                 title: (0, _translate)("An error occurred")
