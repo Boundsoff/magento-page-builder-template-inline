@@ -2,25 +2,26 @@
 /* jscs:disable */
 function _inheritsLoose(t, o) { t.prototype = Object.create(o.prototype), t.prototype.constructor = t, _setPrototypeOf(t, o); }
 function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
-define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-factory"], function (_events, _contentTypeFactory) {
+define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-factory", "Magento_PageBuilder/js/acl", "Boundsoff_PageBuilderTemplateInline/js/acl", "Magento_Ui/js/modal/alert", "knockout"], function (_events, _contentTypeFactory, _acl, _acl2, _alert, _knockout) {
   function _default(base) {
     return /*#__PURE__*/function (_base) {
       "use strict";
 
-      function PageBuilderMixin() {
+      function PageBuilderMixin(config, initialValue) {
         var _this;
-        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
-        _this = _base.call.apply(_base, [this].concat(args)) || this;
+        _this = _base.call(this, config, initialValue) || this;
         _this.template = 'Boundsoff_PageBuilderTemplateInline/page-builder';
+        _this.canApplyInlineTemplates = (0, _acl.isAllowed)(_acl2.resources.TEMPLATE_INLINE_APPLY);
+        _this.isStageReady.subscribe(function () {
+          _this.shouldShowDropZone = _knockout.computed(function () {
+            return _this.stage.interacting() && _this.canApplyInlineTemplates;
+          });
+        });
         return _this;
       }
       _inheritsLoose(PageBuilderMixin, _base);
       var _proto = PageBuilderMixin.prototype;
       _proto.toggleTemplateList = function toggleTemplateList() {
-        // @todo add ACL
-
         _events.trigger('stage:templateList:open', {
           stage: this.stage
         });
@@ -37,18 +38,38 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
           _events.on("stage:" + this.stage.id + ":template:apply", this.templateApply.bind(this));
         }
       };
+      _proto.onMouseTemplateZone = function onMouseTemplateZone(self, $event) {
+        $event.type === 'mouseover' ? $event.target.classList.add('active') : $event.target.classList.remove('active');
+      };
       _proto.templateApply = function templateApply(_ref) {
-        var _this3 = this;
-        var model = _ref.model;
-        return this.templateApplyChild(this.stage.rootContainer, model.component_data).then(function (templateContentType) {
-          _this3.stage.rootContainer.addChild(templateContentType);
+        var model = _ref.model,
+          index = _ref.index,
+          contentType = _ref.contentType;
+        if (!this.canApplyInlineTemplates) {
+          (0, _alert)({
+            content: $t("You do not have permission to apply inline templates."),
+            title: $t("Permission Error")
+          });
+          return;
+        }
+        var parent = contentType || this.stage.rootContainer;
+        return this.templateApplyChild(parent, model.component_data).then(function (templateContentType) {
+          parent.addChild(templateContentType, index);
+          var eventData = {
+            templateContentType: templateContentType,
+            model: model,
+            parent: parent
+          };
+          _events.trigger("templates:apply:successfully", eventData);
+          _events.trigger("templates:apply:successfully:" + templateContentType.config.name, eventData);
         });
       };
       _proto.templateApplyChild = function templateApplyChild(parent, child) {
-        var _this4 = this;
+        var _this3 = this;
         return (0, _contentTypeFactory)(child.config, parent, this.stage.id, child.contentTypeData, child.children.length, child.dataStoresStates).then(function (templateContentType) {
+          templateContentType.dropped = true;
           return Promise.all(child.children.map(function (child, index) {
-            return _this4.templateApplyChild(templateContentType, child).then(function (content) {
+            return _this3.templateApplyChild(templateContentType, child).then(function (content) {
               templateContentType.addChild(content, index);
             });
           })).then(function () {
@@ -61,4 +82,3 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
   }
   return _default;
 });
-//# sourceMappingURL=page-builder-mixin.js.map

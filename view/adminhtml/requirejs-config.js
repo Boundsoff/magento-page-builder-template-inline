@@ -10,6 +10,9 @@ var config = {
             'Magento_PageBuilder/js/page-builder': {
                 'Boundsoff_PageBuilderTemplateInline/js/page-builder-mixin': true,
             },
+            'Magento_PageBuilder/js/drag-drop/sortable': {
+                'Boundsoff_PageBuilderTemplateInline/js/drag-drop/sortable-mixin': true,
+            },
         }
     }
 };

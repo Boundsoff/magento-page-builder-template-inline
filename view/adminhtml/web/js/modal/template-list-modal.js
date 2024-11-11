@@ -41,9 +41,7 @@ define([
 
         applyTemplate(model) {
             this.closeModal();
-            events.trigger(`stage:${this.stage.id}:template:apply`, {
-                model,
-            });
+            events.trigger(`stage:${this.stage.id}:template:apply`, { model });
         },
     });
 });

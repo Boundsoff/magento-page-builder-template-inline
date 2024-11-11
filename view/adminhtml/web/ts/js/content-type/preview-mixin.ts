@@ -5,6 +5,8 @@ import Option from "Magento_PageBuilder/js/content-type-menu/option";
 import Config from "Magento_PageBuilder/js/config";
 import TemplateInlineManager from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager";
 import {TemplateSavePreviewDataInterface} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager.types";
+import {isAllowed} from "Magento_PageBuilder/js/acl";
+import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
 
 export interface PreviewMixin {
     onTemplate(): void;
@@ -16,8 +18,7 @@ export default function (base: typeof Preview) {
         protected retrieveOptions(): OptionsInterface {
             const options = super.retrieveOptions();
 
-            // @todo only rows are now supported
-            if (this.contentType.config.name === 'row') {
+            if (isAllowed(resources.TEMPLATE_INLINE_SAVE)) {
                 options.template = new Option({
                     preview: this,
                     icon: "<i class='bf__pb_icons_emoji'>📝</i>",

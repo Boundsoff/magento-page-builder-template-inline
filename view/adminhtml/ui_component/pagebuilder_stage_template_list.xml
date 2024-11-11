@@ -21,7 +21,6 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <!--        <aclResource> @todo </aclResource>-->
         <dataProvider class="Magento\PageBuilder\Ui\Component\Template\DataProvider"
                       name="pagebuilder_stage_template_list_data_source">
             <settings>
@@ -54,7 +53,7 @@
             </settings>
         </column>
         <column name="preview_image" class="Magento\PageBuilder\Ui\Component\Listing\Columns\PreviewImage"
-                component="Magento_PageBuilder/js/grid/columns/preview-image" sortOrder="30">
+                component="Boundsoff_PageBuilderTemplateInline/js/list/columns/preview-image" sortOrder="30">
             <settings>
                 <bodyTmpl>Boundsoff_PageBuilderTemplateInline/list/cells/thumbnail</bodyTmpl>
                 <altField>name</altField>
@@ -100,13 +99,6 @@
                             <callback>
                                 <provider>pagebuilder_stage_template_list.pagebuilder_stage_template_list_data_source</provider>
                                 <target>onDelete</target>
-                            </callback>
-                        </action>
-                        <action name="apply">
-                            <label translate="true">Apply</label>
-                            <callback>
-                                <provider>pagebuilder_stage_template_list.pagebuilder_stage_template_list_data_source</provider>
-                                <target>onApply</target>
                             </callback>
                         </action>
                     </actions>

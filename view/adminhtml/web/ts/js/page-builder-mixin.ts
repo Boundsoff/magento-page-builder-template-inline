@@ -4,16 +4,36 @@ import {TemplateSavePreviewDataInterface} from "Boundsoff_PageBuilderTemplateInl
 import createContentType from "Magento_PageBuilder/js/content-type-factory";
 import ContentTypeInterface from "Magento_PageBuilder/js/content-type.types";
 import ContentTypeCollectionInterface from "Magento_PageBuilder/js/content-type-collection.types";
+import {isAllowed} from "Magento_PageBuilder/js/acl";
+import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
+import alertDialog from "Magento_Ui/js/modal/alert";
+import ko from 'knockout'
 
 type TemplateModel = object & { component_data: TemplateSavePreviewDataInterface }
+type TemplateApply = {
+    model: TemplateModel,
+    index?: number,
+    contentType?: ContentTypeInterface & ContentTypeCollectionInterface
+}
 
 export default function (base: typeof PageBuilder) {
     return class PageBuilderMixin extends base {
-        template: string = 'Boundsoff_PageBuilderTemplateInline/page-builder'
+        public template: string = 'Boundsoff_PageBuilderTemplateInline/page-builder'
+        public shouldShowDropZone: KnockoutComputed<boolean>;
+        protected readonly canApplyInlineTemplates: boolean;
+
+        constructor(config: any, initialValue: string) {
+            super(config, initialValue);
+
+            this.canApplyInlineTemplates = isAllowed(resources.TEMPLATE_INLINE_APPLY);
+            this.isStageReady.subscribe(() => {
+                this.shouldShowDropZone = ko.computed(() => {
+                    return this.stage.interacting() && this.canApplyInlineTemplates;
+                });
+            })
+        }
 
         public toggleTemplateList() {
-            // @todo add ACL
-
             events.trigger('stage:templateList:open', {
                 stage: this.stage,
             });
@@ -32,10 +52,30 @@ export default function (base: typeof PageBuilder) {
             }
         }
 
-        public templateApply({model}: { model: TemplateModel }) {
-            return this.templateApplyChild(this.stage.rootContainer, model.component_data)
+        public onMouseTemplateZone(self: this, $event: MouseEvent) {
+            $event.type === 'mouseover'
+                ? (<Element>$event.target).classList.add('active')
+                : (<Element>$event.target).classList.remove('active');
+        }
+
+        public templateApply({model, index, contentType}: TemplateApply) {
+            if (!this.canApplyInlineTemplates) {
+                alertDialog({
+                    content: $t("You do not have permission to apply inline templates."),
+                    title: $t("Permission Error"),
+                });
+                return;
+            }
+
+            const parent = contentType || this.stage.rootContainer;
+
+            return this.templateApplyChild(parent, model.component_data)
                 .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
-                    this.stage.rootContainer.addChild(templateContentType);
+                    parent.addChild(templateContentType, index);
+
+                    const eventData = {templateContentType, model, parent};
+                    events.trigger("templates:apply:successfully", eventData);
+                    events.trigger(`templates:apply:successfully:${templateContentType.config.name}`, eventData);
                 })
         }
 
@@ -52,6 +92,8 @@ export default function (base: typeof PageBuilder) {
                 child.dataStoresStates,
             )
                 .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
+                    templateContentType.dropped = true;
+
                     return Promise.all(
                         child.children.map((child, index) => {
                             return this.templateApplyChild(templateContentType, child)

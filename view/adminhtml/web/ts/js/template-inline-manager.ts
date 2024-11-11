@@ -1,16 +1,18 @@
 import {PreviewInterface} from "Magento_PageBuilder/js/content-type/preview.types";
 import * as html2canvas from "html2canvas";
 import $t from "mage/translate";
-import $ from 'jquery';
 import Config from "Magento_PageBuilder/js/config";
 import {TemplateSavePreviewDataInterface} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager.types";
 import registry from "uiRegistry";
+import events from "Magento_PageBuilder/js/events";
 // @ts-ignore
 import alertDialog from 'Magento_PageBuilder/js/modal/confirm-alert';
 // @ts-ignore
 import templateManagerSave from "Magento_PageBuilder/js/modal/template-manager-save";
 // @ts-ignore
 import promptContentTmpl from 'text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html';
+import {isAllowed} from "Magento_PageBuilder/js/acl";
+import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
 
 type TemplateSaveResponse = { success: boolean, message?: String }
 
@@ -42,7 +44,17 @@ export default class TemplateInlineManager {
     }
 
     public static saveAs(preview: PreviewInterface, component_data: TemplateSavePreviewDataInterface) {
-        const capture = TemplateInlineManager.createCapture(preview);
+        if (!isAllowed(resources.TEMPLATE_INLINE_SAVE)) {
+            alertDialog({
+                content: $t("You do not have permission to save inline templates."),
+                title: $t("Permission Error"),
+            });
+            return;
+        }
+
+        // delay for better render
+        const capture = new Promise(resolve => setTimeout(resolve, 1000))
+            .then(() => TemplateInlineManager.createCapture(preview))
 
         // noinspection JSVoidFunctionReturnValueUsed
         const prompt = templateManagerSave({
@@ -90,6 +102,7 @@ export default class TemplateInlineManager {
                                 throw new Error(response.message?.toString() || 'Unknown error');
                             }
 
+                            events.trigger('templates:save:successful', {response});
                             alertDialog({
                                 content: $t("Block has been successfully saved as a template."),
                                 title: $t("Template Saved"),
@@ -97,6 +110,7 @@ export default class TemplateInlineManager {
                             TemplateInlineManager.refreshGrid()
                         })
                         .catch(error => {
+                            events.trigger('templates:save:error', {error, name, created_for, component_data});
                             alertDialog({
                                 content: error.message || $t("An issue occurred while attempting to save " +
                                     "the template, please try again."),

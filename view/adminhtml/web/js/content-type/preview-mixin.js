@@ -2,7 +2,7 @@
 /* jscs:disable */
 function _inheritsLoose(t, o) { t.prototype = Object.create(o.prototype), t.prototype.constructor = t, _setPrototypeOf(t, o); }
 function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
-define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Magento_PageBuilder/js/config", "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager"], function (_translate, _option, _config, _templateInlineManager) {
+define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Magento_PageBuilder/js/config", "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager", "Magento_PageBuilder/js/acl", "Boundsoff_PageBuilderTemplateInline/js/acl"], function (_translate, _option, _config, _templateInlineManager, _acl, _acl2) {
   function _default(base) {
     return /*#__PURE__*/function (_base) {
       "use strict";
@@ -14,9 +14,7 @@ define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Ma
       var _proto = _class.prototype;
       _proto.retrieveOptions = function retrieveOptions() {
         var options = _base.prototype.retrieveOptions.call(this);
-
-        // @todo only rows are now supported
-        if (this.contentType.config.name === 'row') {
+        if ((0, _acl.isAllowed)(_acl2.resources.TEMPLATE_INLINE_SAVE)) {
           options.template = new _option({
             preview: this,
             icon: "<i class='bf__pb_icons_emoji'>📝</i>",
@@ -50,4 +48,3 @@ define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Ma
   }
   return _default;
 });
-//# sourceMappingURL=preview-mixin.js.map
