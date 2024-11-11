@@ -7,10 +7,6 @@ import TemplateInlineManager from "Boundsoff_PageBuilderTemplateInline/js/templa
 import {TemplateSavePreviewDataInterface} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager.types";
 import {isAllowed} from "Magento_PageBuilder/js/acl";
 import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
-import ko from 'knockout';
-import ContentTypeInterface from "Magento_PageBuilder/js/content-type.types";
-import ContentTypeConfigInterface from "Magento_PageBuilder/js/content-type-config.types";
-import ObservableUpdater from "Magento_PageBuilder/js/content-type/observable-updater";
 
 export interface PreviewMixin {
     onTemplate(): void;

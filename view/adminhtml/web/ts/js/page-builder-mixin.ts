@@ -7,6 +7,7 @@ import ContentTypeCollectionInterface from "Magento_PageBuilder/js/content-type-
 import {isAllowed} from "Magento_PageBuilder/js/acl";
 import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
 import alertDialog from "Magento_Ui/js/modal/alert";
+import ko from 'knockout'
 
 type TemplateModel = object & { component_data: TemplateSavePreviewDataInterface }
 type TemplateApply = {
@@ -18,16 +19,18 @@ type TemplateApply = {
 export default function (base: typeof PageBuilder) {
     return class PageBuilderMixin extends base {
         public template: string = 'Boundsoff_PageBuilderTemplateInline/page-builder'
-        public readonly shouldShowDropZone: KnockoutComputed<boolean>;
+        public shouldShowDropZone: KnockoutComputed<boolean>;
         protected readonly canApplyInlineTemplates: boolean;
 
         constructor(config: any, initialValue: string) {
             super(config, initialValue);
 
             this.canApplyInlineTemplates = isAllowed(resources.TEMPLATE_INLINE_APPLY);
-            this.shouldShowDropZone = ko.computed(() => {
-                return this.stage.interacting() && this.canApplyInlineTemplates;
-            });
+            this.isStageReady.subscribe(() => {
+                this.shouldShowDropZone = ko.computed(() => {
+                    return this.stage.interacting() && this.canApplyInlineTemplates;
+                });
+            })
         }
 
         public toggleTemplateList() {
