@@ -29,7 +29,12 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
       });
     };
     TemplateInlineManager.saveAs = function saveAs(preview, component_data) {
-      var capture = TemplateInlineManager.createCapture(preview);
+      // delay for better render
+      var capture = new Promise(function (resolve) {
+        return setTimeout(resolve, 1000);
+      }).then(function () {
+        return TemplateInlineManager.createCapture(preview);
+      });
 
       // noinspection JSVoidFunctionReturnValueUsed
       var prompt = (0, _templateManagerSave)({

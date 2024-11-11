@@ -37,6 +37,9 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
           _events.on("stage:" + this.stage.id + ":template:apply", this.templateApply.bind(this));
         }
       };
+      _proto.onMouseTemplateZone = function onMouseTemplateZone(self, $event) {
+        $event.type === 'mouseover' ? $event.target.classList.add('active') : $event.target.classList.remove('active');
+      };
       _proto.templateApply = function templateApply(_ref) {
         var model = _ref.model,
           index = _ref.index,
@@ -49,6 +52,7 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
       _proto.templateApplyChild = function templateApplyChild(parent, child) {
         var _this3 = this;
         return (0, _contentTypeFactory)(child.config, parent, this.stage.id, child.contentTypeData, child.children.length, child.dataStoresStates).then(function (templateContentType) {
+          templateContentType.dropped = true;
           return Promise.all(child.children.map(function (child, index) {
             return _this3.templateApplyChild(templateContentType, child).then(function (content) {
               templateContentType.addChild(content, index);
