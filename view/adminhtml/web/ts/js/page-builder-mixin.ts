@@ -6,6 +6,7 @@ import ContentTypeInterface from "Magento_PageBuilder/js/content-type.types";
 import ContentTypeCollectionInterface from "Magento_PageBuilder/js/content-type-collection.types";
 
 type TemplateModel = object & { component_data: TemplateSavePreviewDataInterface }
+type TemplateApply = { model: TemplateModel, index?: number, contentType?: ContentTypeInterface & ContentTypeCollectionInterface }
 
 export default function (base: typeof PageBuilder) {
     return class PageBuilderMixin extends base {
@@ -32,10 +33,12 @@ export default function (base: typeof PageBuilder) {
             }
         }
 
-        public templateApply({model}: { model: TemplateModel }) {
-            return this.templateApplyChild(this.stage.rootContainer, model.component_data)
+        public templateApply({model, index, contentType}: TemplateApply) {
+            const parent = contentType || this.stage.rootContainer;
+
+            return this.templateApplyChild(parent, model.component_data)
                 .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
-                    this.stage.rootContainer.addChild(templateContentType);
+                    parent.addChild(templateContentType, index);
                 })
         }
 
@@ -52,6 +55,16 @@ export default function (base: typeof PageBuilder) {
                 child.dataStoresStates,
             )
                 .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
+                    templateContentType.dropped = true;
+                    events.trigger("contentType:dropAfter", {id: contentType.id, contentType});
+                    events.trigger(
+                        contentTypeConfig.name + ":dropAfter",
+                        {
+                            id: contentType.id,
+                            contentType,
+                        },
+                    );
+
                     return Promise.all(
                         child.children.map((child, index) => {
                             return this.templateApplyChild(templateContentType, child)
