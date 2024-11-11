@@ -2,6 +2,19 @@
     font-size: 2rem;
 }
 
+.bf__pb_drop-zone {
+    color: @color-white;
+    border: 1px dashed @color-white;
+    padding: @indent__s;
+    display: inline-block;
+    margin: 0 @indent__xs 0 0;
+
+    &.active {
+        border-style: none;
+        background-color: @color-white;
+        color: @text__color;
+    }
+}
 
 .icon-pagebuilder-fullscreen-exit:before {
     padding-left: 0;

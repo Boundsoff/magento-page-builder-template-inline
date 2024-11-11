@@ -33,6 +33,12 @@ export default function (base: typeof PageBuilder) {
             }
         }
 
+        public onMouseTemplateZone(self: this, $event: MouseEvent) {
+            $event.type === 'mouseover'
+                ? (<Element>$event.target).classList.add('active')
+                : (<Element>$event.target).classList.remove('active');
+        }
+
         public templateApply({model, index, contentType}: TemplateApply) {
             const parent = contentType || this.stage.rootContainer;
 
@@ -56,14 +62,6 @@ export default function (base: typeof PageBuilder) {
             )
                 .then((templateContentType: ContentTypeInterface & ContentTypeCollectionInterface) => {
                     templateContentType.dropped = true;
-                    events.trigger("contentType:dropAfter", {id: contentType.id, contentType});
-                    events.trigger(
-                        contentTypeConfig.name + ":dropAfter",
-                        {
-                            id: contentType.id,
-                            contentType,
-                        },
-                    );
 
                     return Promise.all(
                         child.children.map((child, index) => {

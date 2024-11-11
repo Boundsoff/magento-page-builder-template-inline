@@ -42,7 +42,9 @@ export default class TemplateInlineManager {
     }
 
     public static saveAs(preview: PreviewInterface, component_data: TemplateSavePreviewDataInterface) {
-        const capture = TemplateInlineManager.createCapture(preview);
+        // delay for better render
+        const capture = new Promise(resolve => setTimeout(resolve, 1000))
+            .then(() => TemplateInlineManager.createCapture(preview))
 
         // noinspection JSVoidFunctionReturnValueUsed
         const prompt = templateManagerSave({

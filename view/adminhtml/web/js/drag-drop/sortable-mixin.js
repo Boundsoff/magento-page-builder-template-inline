@@ -30,6 +30,13 @@ define(["jquery", "mage/utils/wrapper", "Magento_PageBuilder/js/events", "Bounds
         }
         applyTemplateInline.call(this, modelData, preview, arguments[1], arguments[2]);
       });
+      options.stop = _wrapper.wrap(options.stop, function (superFunction, event) {
+        var target = event.originalEvent.target;
+        if (target.classList.contains('bf__pb_drop-zone')) {
+          preview.onTemplate();
+        }
+        return superFunction();
+      });
       return options;
     });
     return sortable;
