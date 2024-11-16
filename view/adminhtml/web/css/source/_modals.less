@@ -1,6 +1,7 @@
 .content-fit {
     &.modal-slide {
         width: max-content;
+        max-width: 600px;
         margin-left: auto;
 
         .modal-header {
@@ -10,6 +11,10 @@
             .modal-title {
                 .lib-css(padding-left, @modal-slide__padding);
             }
+        }
+
+        .data-grid-search-content {
+            min-width: 200px;
         }
     }
 
