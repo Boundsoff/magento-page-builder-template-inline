@@ -115,8 +115,9 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
                 created_for: created_for,
                 component_data: component_data
               });
+              var errorMessage = error.message || (0, _translate)("An issue occurred while attempting to save " + "the template, please try again.");
               (0, _confirmAlert)({
-                content: error.message || (0, _translate)("An issue occurred while attempting to save " + "the template, please try again."),
+                content: "<pre>" + errorMessage + "</pre>",
                 title: (0, _translate)("An error occurred")
               });
               throw error;
