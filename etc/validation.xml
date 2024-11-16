@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:framework:Validator/etc/validation.xsd">
+    <entity name="template_inline">
+        <rules>
+            <rule name="check_name_empty">
+                <property_constraints>
+                    <property name="name">
+                        <constraint alias="empty_validator" class="\Boundsoff\PageBuilderTemplateInline\Model\Validator\EmptyValidator"/>
+                    </property>
+                </property_constraints>
+            </rule>
+            <rule name="check_name_exists">
+                <entity_constraints>
+                    <constraint alias="already_exists" class="\Boundsoff\PageBuilderTemplateInline\Model\Validator\AlreadyExistsValidator\Name"/>
+                </entity_constraints>
+            </rule>
+        </rules>
+        <groups>
+            <group name="model">
+                <uses>
+                    <use rule="check_name_empty"/>
+                </uses>
+            </group>
+            <group name="resourceModel">
+                <uses>
+                    <use rule="check_name_exists"/>
+                </uses>
+            </group>
+        </groups>
+    </entity>
+</validation>

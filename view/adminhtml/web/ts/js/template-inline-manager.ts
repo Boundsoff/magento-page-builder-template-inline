@@ -120,9 +120,10 @@ export default class TemplateInlineManager {
                         })
                         .catch(error => {
                             events.trigger('templates:save:error', {error, name, created_for, component_data});
+                            const errorMessage = error.message || $t("An issue occurred while attempting to save " +
+                                "the template, please try again.");
                             alertDialog({
-                                content: error.message || $t("An issue occurred while attempting to save " +
-                                    "the template, please try again."),
+                                content: `<pre>${errorMessage}</pre>`,
                                 title: $t("An error occurred"),
                             });
 
