@@ -1,9 +1,11 @@
 import $ from 'jquery';
+import ko from 'knockout';
 import wrapper from 'mage/utils/wrapper';
 import events from "Magento_PageBuilder/js/events";
 import Preview from "Magento_PageBuilder/js/content-type/preview";
 import {getDraggedTemplateModelData, ModelData} from "Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry";
 import {PreviewMixin} from "Boundsoff_PageBuilderTemplateInline/js/content-type/preview-mixin";
+import ContentTypeInterface from "Magento_PageBuilder/js/content-type";
 
 type PreviewExtended = Preview & PreviewMixin;
 
@@ -38,10 +40,11 @@ export default function (sortable: { getSortableOptions: Function }) {
             applyTemplateInline.call(this, modelData, preview, arguments[1], arguments[2]);
         });
 
-        options.stop = wrapper.wrap(options.stop, function (superFunction: Function, event: { originalEvent?: Event }) {
+        options.stop = wrapper.wrap(options.stop, function (superFunction: Function, event: { originalEvent?: Event }, ui: JQueryUI.SortableUIParams) {
             const target = <HTMLElement>event.originalEvent.target;
             if (target.classList.contains('bf__pb_drop-zone')) {
-                preview.onTemplate();
+                const contentType: ContentTypeInterface = ko.dataFor(ui.item[0]);
+                (<PreviewExtended>contentType.preview).onTemplate();
             }
 
             return superFunction();
