@@ -10,7 +10,14 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
 
     function TemplateInlineManager() {}
     TemplateInlineManager.createCapture = function createCapture(preview) {
-      var element = preview.wrapperElement;
+      var element = function () {
+        switch (preview.config.name) {
+          case "column":
+            return preview.element[0];
+          default:
+            return preview.wrapperElement;
+        }
+      }();
       var stageElement = document.getElementById(preview.contentType.stageId);
       stageElement.classList.add('capture');
       stageElement.classList.add('interacting');

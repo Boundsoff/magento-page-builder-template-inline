@@ -14,12 +14,20 @@ import promptContentTmpl from 'text!Magento_PageBuilder/template/modal/template-
 import {isAllowed} from "Magento_PageBuilder/js/acl";
 import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
 import {emptyPreviewImage} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager/empty-preview-image";
+import Preview from "Magento_PageBuilder/js/content-type/column/preview";
 
 type TemplateSaveResponse = { success: boolean, message?: String }
 
 export default class TemplateInlineManager {
     public static createCapture(preview: PreviewInterface): Html2CanvasPromise<String> {
-        const element = preview.wrapperElement as HTMLElement;
+        const element: HTMLElement = (() => {
+            switch (preview.config.name) {
+                case "column":
+                    return (<Preview>preview).element[0];
+                default:
+                    return <HTMLElement>preview.wrapperElement;
+            }
+        })();
 
         const stageElement = document.getElementById(preview.contentType.stageId);
         stageElement.classList.add('capture');
