@@ -13,6 +13,7 @@ import templateManagerSave from "Magento_PageBuilder/js/modal/template-manager-s
 import promptContentTmpl from 'text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html';
 import {isAllowed} from "Magento_PageBuilder/js/acl";
 import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
+import {emptyPreviewImage} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager/empty-preview-image";
 
 type TemplateSaveResponse = { success: boolean, message?: String }
 
@@ -39,7 +40,7 @@ export default class TemplateInlineManager {
                 stageElement.classList.remove('interacting');
 
                 console.error(error);
-                return '';
+                return emptyPreviewImage;
             })
     }
 
