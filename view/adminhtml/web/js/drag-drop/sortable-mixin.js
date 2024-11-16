@@ -43,3 +43,4 @@ define(["jquery", "mage/utils/wrapper", "Magento_PageBuilder/js/events", "Bounds
   }
   return _default;
 });
+//# sourceMappingURL=sortable-mixin.js.map

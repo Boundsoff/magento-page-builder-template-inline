@@ -13,3 +13,4 @@ define([], function () {
     setDraggedTemplateModelData: setDraggedTemplateModelData
   };
 });
+//# sourceMappingURL=registry.js.map
