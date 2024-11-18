@@ -106,8 +106,7 @@
                             <confirm>
                                 <title translate="true">Delete template</title>
                                 <message translate="true">
-                                    This template will be deleted permanently,
-                                    do U want to continue?
+                                    This template will be deleted permanently, do U want to continue?
                                 </message>
                             </confirm>
                             <callback>
