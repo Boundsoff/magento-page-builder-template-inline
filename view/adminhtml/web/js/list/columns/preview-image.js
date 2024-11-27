@@ -110,18 +110,8 @@ define([
             if ($data.shouldContinue && !!modelData) {
                 modelData.column = $data;
 
-                // can trigger multiple times by jquery events ??
-                events.off("column:drag:new", this.onColumnDragNew.bind(this));
                 $data.shouldContinue = false;
-
-                // since jquery plugin sortable won't be trigger when apply above the column group, need to do manually
-                if ($data.isColumnLinePlaceholderActive) {
-                    events.trigger(`stage:${modelData.stage.id}:template:apply`, {
-                        modelData,
-                        index: null,
-                        contentType: $data.preview.contentType
-                    });
-                }
+                events.off("column:drag:new", this.onColumnDragNew.bind(this));
             }
         },
     });
