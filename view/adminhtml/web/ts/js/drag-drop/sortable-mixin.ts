@@ -24,7 +24,7 @@ function applyTemplateInline(modelData: ModelData, preview: Preview, event: Even
 
     const model = modelData.model;
     const contentType = preview.contentType;
-    events.trigger(`stage:${modelData.stage.id}:template:apply`, { model, index, contentType });
+    events.trigger(`stage:${modelData.stage.id}:template:apply`, { modelData, index, contentType });
 }
 
 export default function (sortable: { getSortableOptions: Function }) {

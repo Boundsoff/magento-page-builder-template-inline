@@ -139,6 +139,7 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
     };
     return TemplateInlineManager;
   }();
+  TemplateInlineManager.SupportedContentTypes = new Set(["block", "image", "row", "text", "column", "column-group", "heading", "products", "video", "tabs", "banner", "slider", "buttons", "map", "html"]);
   return TemplateInlineManager;
 });
 //# sourceMappingURL=template-inline-manager.js.map

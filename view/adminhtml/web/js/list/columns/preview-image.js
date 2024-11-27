@@ -2,25 +2,40 @@ define([
     'jquery',
     'uiRegistry',
     'Magento_PageBuilder/js/grid/columns/preview-image',
+    'Magento_PageBuilder/js/config',
     'Magento_PageBuilder/js/events',
     'Magento_PageBuilder/js/drag-drop/drop-indicators',
     'Magento_PageBuilder/js/drag-drop/matrix',
+    'Magento_PageBuilder/js/drag-drop/registry',
     'Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry',
     'Magento_PageBuilder/js/binding/draggable',
 ], function (
     $,
     registry,
     ColumnPreviewImage,
+    Config,
     events,
     dropIndicators,
     dropMatrix,
+    dragDropRegistry,
     dropRegistry,
 ) {
     'use strict';
 
     const {hideDropIndicators, showDropIndicators} = dropIndicators;
     const {getAllowedContainersClasses} = dropMatrix;
-    const {setDraggedTemplateModelData} = dropRegistry;
+    const {setDraggedTemplateModelData, getDraggedTemplateModelData} = dropRegistry;
+    const {setDraggedContentTypeConfig} = dragDropRegistry;
+
+    // need to map content type name, for better input
+    const configContentTypeName = ((name) => {
+        switch (name) {
+            case "column":
+                return "column-group";
+            default:
+                return name;
+        }
+    });
 
     // noinspection JSUnusedGlobalSymbols
     return ColumnPreviewImage.extend({
@@ -30,7 +45,11 @@ define([
                 component_data: JSON.parse($row.component_data),
             };
             const modal = registry.get('pagebuilder_stage_template.pagebuilder_stage_template.modal_templates');
-            const connectToSortable = getAllowedContainersClasses(row.component_data.config.name, modal.stage.id);
+
+            const connectToSortable = getAllowedContainersClasses(
+                configContentTypeName(row.component_data.config.name),
+                modal.stage.id,
+            );
 
             return {
                 appendTo: "body",
@@ -61,9 +80,15 @@ define([
                 }
             });
 
-            showDropIndicators(row.component_data.config.name, modal.stage.id);
+            const configName = configContentTypeName(row.component_data.config.name);
+            const contentTypeConfig = Config.getContentTypeConfig(configName);
+            setDraggedContentTypeConfig(contentTypeConfig);
+            setDraggedTemplateModelData({model: row, stage: modal.stage});
+
+            events.on("column:drag:new", this.onColumnDragNew.bind(this));
+
+            showDropIndicators(configName, modal.stage.id);
             events.trigger("stage:interactionStart", {stage: modal.stage});
-            setDraggedTemplateModelData({ model: row, stage: modal.stage });
         },
         onDragStop(row, modal) {
             $(".content-type-container.ui-sortable").each(function () {
@@ -72,9 +97,22 @@ define([
                 }
             });
 
+            setDraggedContentTypeConfig(null);
             setDraggedTemplateModelData(null);
-            events.trigger("stage:interactionStop", {stage: modal.stage});
             hideDropIndicators();
+            events.trigger("stage:interactionStop", {stage: modal.stage});
+
+            events.off("column:drag:new", this.onColumnDragNew.bind(this));
+        },
+        onColumnDragNew($data) {
+            const modelData = getDraggedTemplateModelData();
+
+            if ($data.shouldContinue && !!modelData) {
+                modelData.column = $data;
+
+                $data.shouldContinue = false;
+                events.off("column:drag:new", this.onColumnDragNew.bind(this));
+            }
         },
     });
 })
