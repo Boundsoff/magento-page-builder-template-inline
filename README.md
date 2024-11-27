@@ -14,9 +14,6 @@ same as creation of new element on left panel
 
 ## Installation
 
-### Alpha
-Still works in progress, u can use it but U need to set the _minimum-stability_ to **alpha**
-
 #### Download module
 ```shell
 composer require boundsoff/module-page-builder-template-inline
@@ -36,9 +33,3 @@ php bin/magento setup:di:compile
 ```shell
 php bin/magento setup:static-content:deploy
 ```
-
-## Work in progress (WIP)
-
-1. currently the element _columns_ cannot by applied properly, it will be fixed in the future
-2. some rending elements for the preview image gets error which can lead to empty image,
-   will get it fixed later on 
