@@ -24,8 +24,18 @@ define([
 
     const {hideDropIndicators, showDropIndicators} = dropIndicators;
     const {getAllowedContainersClasses} = dropMatrix;
-    const {setDraggedTemplateModelData} = dropRegistry;
-    const {setDraggedContentTypeConfig} = dragDropRegistry
+    const {setDraggedTemplateModelData, getDraggedTemplateModelData} = dropRegistry;
+    const {setDraggedContentTypeConfig} = dragDropRegistry;
+
+    // need to map content type name, for better input
+    const configContentTypeName = ((name) => {
+        switch (name) {
+            case "column":
+                return "column-group";
+            default:
+                return name;
+        }
+    });
 
     // noinspection JSUnusedGlobalSymbols
     return ColumnPreviewImage.extend({
@@ -35,7 +45,11 @@ define([
                 component_data: JSON.parse($row.component_data),
             };
             const modal = registry.get('pagebuilder_stage_template.pagebuilder_stage_template.modal_templates');
-            const connectToSortable = getAllowedContainersClasses(row.component_data.config.name, modal.stage.id);
+
+            const connectToSortable = getAllowedContainersClasses(
+                configContentTypeName(row.component_data.config.name),
+                modal.stage.id,
+            );
 
             return {
                 appendTo: "body",
@@ -66,13 +80,14 @@ define([
                 }
             });
 
-            const contentTypeConfig = Config.getContentTypeConfig(row.component_data.config.name);
+            const configName = configContentTypeName(row.component_data.config.name);
+            const contentTypeConfig = Config.getContentTypeConfig(configName);
             setDraggedContentTypeConfig(contentTypeConfig);
-            setDraggedTemplateModelData({ model: row, stage: modal.stage });
+            setDraggedTemplateModelData({model: row, stage: modal.stage});
 
             events.on("column:drag:new", this.onColumnDragNew.bind(this));
 
-            showDropIndicators(row.component_data.config.name, modal.stage.id);
+            showDropIndicators(configName, modal.stage.id);
             events.trigger("stage:interactionStart", {stage: modal.stage});
         },
         onDragStop(row, modal) {
@@ -90,7 +105,24 @@ define([
             events.off("column:drag:new", this.onColumnDragNew.bind(this));
         },
         onColumnDragNew($data) {
-            $data.shouldContinue = false;
+            const modelData = getDraggedTemplateModelData();
+
+            if ($data.shouldContinue && !!modelData) {
+                modelData.column = $data;
+
+                // can trigger multiple times by jquery events ??
+                events.off("column:drag:new", this.onColumnDragNew.bind(this));
+                $data.shouldContinue = false;
+
+                // since jquery plugin sortable won't be trigger when apply above the column group, need to do manually
+                if ($data.isColumnLinePlaceholderActive) {
+                    events.trigger(`stage:${modelData.stage.id}:template:apply`, {
+                        modelData,
+                        index: null,
+                        contentType: $data.preview.contentType
+                    });
+                }
+            }
         },
     });
 })

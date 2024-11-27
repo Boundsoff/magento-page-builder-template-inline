@@ -444,7 +444,17 @@ define(["jquery", "knockout", "Magento_PageBuilder/js/content-type-factory", "Ma
     _proto.handleMouseUp = function handleMouseUp() {
       var self = this;
       var dragColumn = (0, _registry.getDragColumn)();
-      if ((this.columnLineDropPlaceholder.hasClass("active") || this.columnLineBottomDropPlaceholder.hasClass("active")) && !dragColumn) {
+      var eventData = {
+        shouldContinue: true,
+        dropPosition: this.dropPosition,
+        preview: this,
+        isColumnLinePlaceholderActive: this.columnLineDropPlaceholder.hasClass("active") || this.columnLineBottomDropPlaceholder.hasClass("active")
+      };
+      _events.trigger("column:drag:new", eventData);
+      if (!eventData.shouldContinue) {
+        return;
+      }
+      if (eventData.isColumnLinePlaceholderActive && !dragColumn) {
         (0, _factory.createColumnLine)(this.contentType.parentContentType, this.resizeUtils.getSmallestColumnWidth(), this.getNewColumnLineIndex()).then(function (columnLine) {
           _events.trigger(columnLine.config.name + ":dropAfter", {
             id: columnLine.id,
@@ -671,6 +681,7 @@ define(["jquery", "knockout", "Magento_PageBuilder/js/content-type-factory", "Ma
       var draggedColumn = (0, _registry.getDragColumn)();
       return (this.dropOverElement || draggedColumn) && event.pageY > linePosition.top + 15 + this.lineDropperHeight && event.pageY < linePosition.top + 15 + linePosition.outerHeight - this.lineDropperHeight;
     }
+
     /**
      * Handle mouse move events on when dropping elements
      *

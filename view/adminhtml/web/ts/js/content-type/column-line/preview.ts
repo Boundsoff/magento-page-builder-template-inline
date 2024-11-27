@@ -498,7 +498,7 @@ export default class Preview extends PreviewCollection {
 
             _.defer(() => {
                 // Re-enable any disabled sortable areas
-                line.find(".ui-sortable").each(function() {
+                line.find(".ui-sortable").each(function () {
                     if ($(this).data("ui-sortable")) {
                         $(this).sortable("option", "disabled", false);
                     }
@@ -547,10 +547,21 @@ export default class Preview extends PreviewCollection {
 
         const self = this;
         const dragColumn = getDragColumn();
-        if ((this.columnLineDropPlaceholder.hasClass("active")
-                || this.columnLineBottomDropPlaceholder.hasClass("active"))
-            && !dragColumn) {
 
+        const eventData = {
+            shouldContinue: true,
+            dropPosition: this.dropPosition,
+            preview: this,
+            isColumnLinePlaceholderActive: this.columnLineDropPlaceholder.hasClass("active")
+                || this.columnLineBottomDropPlaceholder.hasClass("active"),
+        };
+
+        events.trigger("column:drag:new", eventData);
+        if (!eventData.shouldContinue) {
+            return;
+        }
+
+        if (eventData.isColumnLinePlaceholderActive && !dragColumn) {
             createColumnLine(
                 this.contentType.parentContentType,
                 this.resizeUtils.getSmallestColumnWidth(),
@@ -570,7 +581,7 @@ export default class Preview extends PreviewCollection {
 
             // Re-enable the parent disabled sortable instance
             _.defer(() => {
-                $(".element-children.ui-sortable-disabled").each(function() {
+                $(".element-children.ui-sortable-disabled").each(function () {
                     $(this).sortable("option", "disabled", false);
                 });
             });
@@ -798,7 +809,7 @@ export default class Preview extends PreviewCollection {
         const id = this.contentType.id;
         let index = 0;
         siblings.forEach((columnLine) => {
-            if (columnLine.id === id){
+            if (columnLine.id === id) {
                 return false;
             }
             index++;
@@ -842,6 +853,7 @@ export default class Preview extends PreviewCollection {
             event.pageY > linePosition.top + 15 + this.lineDropperHeight &&
             event.pageY < linePosition.top + 15 + linePosition.outerHeight - this.lineDropperHeight;
     }
+
     /**
      * Handle mouse move events on when dropping elements
      *
@@ -864,8 +876,7 @@ export default class Preview extends PreviewCollection {
             this.columnLineBottomDropPlaceholder.addClass("active");
             this.columnLineBottomDropPlaceholder.show();
             return this.handleLineDropMouseMove(event, line, linePosition);
-        }
-        else if (this.dropOverElement) {
+        } else if (this.dropOverElement) {
             this.columnLineDropPlaceholder.hide();
             this.columnLineBottomDropPlaceholder.hide();
             this.columnLineBottomDropPlaceholder.removeClass("active");
@@ -947,7 +958,7 @@ export default class Preview extends PreviewCollection {
      * @param {JQuery} line
      * @returns {}
      */
-    protected getLinePosition(line: JQuery): LinePositionCache{
+    protected getLinePosition(line: JQuery): LinePositionCache {
         if (!this.linePositionCache) {
             this.linePositionCache = {
                 top: line.offset().top,
@@ -978,7 +989,7 @@ export default class Preview extends PreviewCollection {
 
                 _.defer(() => {
                     // Re-enable the column group sortable instance & all children sortable instances
-                    line.parents(".element-children").each(function() {
+                    line.parents(".element-children").each(function () {
                         if ($(this).data("ui-sortable")) {
                             $(this).sortable("option", "disabled", false);
                         }
@@ -987,7 +998,7 @@ export default class Preview extends PreviewCollection {
             },
             activate() {
                 if (getDraggedContentTypeConfig() === Config.getContentTypeConfig("column-group")) {
-                    line.find(".ui-sortable").each(function() {
+                    line.find(".ui-sortable").each(function () {
                         if ($(this).data("ui-sortable")) {
                             $(this).sortable("option", "disabled", true);
                         }
@@ -1241,7 +1252,7 @@ export default class Preview extends PreviewCollection {
         }
     }
 
-    protected getNewColumnLineIndex(): number {
+    public getNewColumnLineIndex(): number {
         let index = -1;
         const self = this;
         for (const child of this.contentType.parentContentType.children()) {

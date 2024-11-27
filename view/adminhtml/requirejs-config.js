@@ -12,6 +12,9 @@ var config = {
             'Magento_PageBuilder/js/content-type/preview-collection': {
                 'Boundsoff_PageBuilderTemplateInline/js/content-type/preview-collection-mixin': true,
             },
+            'Magento_PageBuilder/js/content-type/column-group/preview': {
+                'Boundsoff_PageBuilderTemplateInline/js/content-type/column-group/preview-mixin': true,
+            },
             'Magento_PageBuilder/js/page-builder': {
                 'Boundsoff_PageBuilderTemplateInline/js/page-builder-mixin': true,
             },

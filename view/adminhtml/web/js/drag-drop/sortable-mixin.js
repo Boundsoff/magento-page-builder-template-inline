@@ -15,7 +15,7 @@ define(["jquery", "knockout", "mage/utils/wrapper", "Magento_PageBuilder/js/even
     var model = modelData.model;
     var contentType = preview.contentType;
     _events.trigger("stage:" + modelData.stage.id + ":template:apply", {
-      model: model,
+      modelData: modelData,
       index: index,
       contentType: contentType
     });
