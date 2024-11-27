@@ -2,18 +2,22 @@ define([
     'jquery',
     'uiRegistry',
     'Magento_PageBuilder/js/grid/columns/preview-image',
+    'Magento_PageBuilder/js/config',
     'Magento_PageBuilder/js/events',
     'Magento_PageBuilder/js/drag-drop/drop-indicators',
     'Magento_PageBuilder/js/drag-drop/matrix',
+    'Magento_PageBuilder/js/drag-drop/registry',
     'Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry',
     'Magento_PageBuilder/js/binding/draggable',
 ], function (
     $,
     registry,
     ColumnPreviewImage,
+    Config,
     events,
     dropIndicators,
     dropMatrix,
+    dragDropRegistry,
     dropRegistry,
 ) {
     'use strict';
@@ -21,6 +25,7 @@ define([
     const {hideDropIndicators, showDropIndicators} = dropIndicators;
     const {getAllowedContainersClasses} = dropMatrix;
     const {setDraggedTemplateModelData} = dropRegistry;
+    const {setDraggedContentTypeConfig} = dragDropRegistry
 
     // noinspection JSUnusedGlobalSymbols
     return ColumnPreviewImage.extend({
@@ -61,9 +66,14 @@ define([
                 }
             });
 
+            const contentTypeConfig = Config.getContentTypeConfig(row.component_data.config.name);
+            setDraggedContentTypeConfig(contentTypeConfig);
+            setDraggedTemplateModelData({ model: row, stage: modal.stage });
+
+            events.on("column:drag:new", this.onColumnDragNew.bind(this));
+
             showDropIndicators(row.component_data.config.name, modal.stage.id);
             events.trigger("stage:interactionStart", {stage: modal.stage});
-            setDraggedTemplateModelData({ model: row, stage: modal.stage });
         },
         onDragStop(row, modal) {
             $(".content-type-container.ui-sortable").each(function () {
@@ -72,9 +82,15 @@ define([
                 }
             });
 
+            setDraggedContentTypeConfig(null);
             setDraggedTemplateModelData(null);
-            events.trigger("stage:interactionStop", {stage: modal.stage});
             hideDropIndicators();
+            events.trigger("stage:interactionStop", {stage: modal.stage});
+
+            events.off("column:drag:new", this.onColumnDragNew.bind(this));
+        },
+        onColumnDragNew($data) {
+            $data.shouldContinue = false;
         },
     });
 })

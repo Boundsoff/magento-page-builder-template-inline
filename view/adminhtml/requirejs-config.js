@@ -1,4 +1,9 @@
 var config = {
+    map: {
+        '*': {
+            'Magento_PageBuilder/js/content-type/column-line/preview': 'Boundsoff_PageBuilderTemplateInline/js/content-type/column-line/preview',
+        },
+    },
     config: {
         mixins: {
             'Magento_PageBuilder/js/content-type/preview': {
