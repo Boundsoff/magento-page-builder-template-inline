@@ -44,4 +44,3 @@ define(["jquery", "knockout", "mage/utils/wrapper", "Magento_PageBuilder/js/even
   }
   return _default;
 });
-//# sourceMappingURL=sortable-mixin.js.map

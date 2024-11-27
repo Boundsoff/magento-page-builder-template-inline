@@ -1074,4 +1074,3 @@ define(["jquery", "knockout", "Magento_PageBuilder/js/content-type-factory", "Ma
   }(_previewCollection);
   return Preview;
 });
-//# sourceMappingURL=preview.js.map

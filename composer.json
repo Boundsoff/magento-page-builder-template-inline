@@ -6,7 +6,7 @@
     "homepage": "https://github.com/none-life/magento-page-builder-template-inline",
     "license": "MIT",
     "dist": {
-        "url": "https://github.com/none-life/magento-page-builder-template-inline/releases/download/v0.9.0-alpha/dist.zip",
+        "url": "https://github.com/none-life/magento-page-builder-template-inline/releases/download/v1.0.0/dist.zip",
         "type": "zip"
     },
     "authors": [
