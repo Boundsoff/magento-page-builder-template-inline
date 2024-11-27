@@ -14,14 +14,16 @@ define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Ma
       var _proto = _class.prototype;
       _proto.retrieveOptions = function retrieveOptions() {
         var options = _base.prototype.retrieveOptions.call(this);
-        options.template = new _option({
-          preview: this,
-          icon: "<i class='icon-pagebuilder-template icomoon-insert-template'></i>",
-          title: (0, _translate)("Template"),
-          action: this.onTemplate,
-          classes: ["template-structural"],
-          sort: 55
-        });
+        if (_templateInlineManager.SupportedContentTypes.has(this.contentType.config.name)) {
+          options.template = new _option({
+            preview: this,
+            icon: "<i class='icon-pagebuilder-template icomoon-insert-template'></i>",
+            title: (0, _translate)("Template"),
+            action: this.onTemplate,
+            classes: ["template-structural"],
+            sort: 55
+          });
+        }
         return options;
       };
       _proto.onTemplate = function onTemplate() {

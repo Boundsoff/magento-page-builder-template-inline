@@ -19,6 +19,24 @@ import Preview from "Magento_PageBuilder/js/content-type/column/preview";
 type TemplateSaveResponse = { success: boolean, message?: String }
 
 export default class TemplateInlineManager {
+    static SupportedContentTypes = new Set([
+        "block",
+        "image",
+        "row",
+        "text",
+        "column",
+        "column-group",
+        "heading",
+        "products",
+        "video",
+        "tabs",
+        "banner",
+        "slider",
+        "buttons",
+        "map",
+        "html",
+    ]);
+
     public static createCapture(preview: PreviewInterface): Html2CanvasPromise<String> {
         const element: HTMLElement = (() => {
             switch (preview.config.name) {
