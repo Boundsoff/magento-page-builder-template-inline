@@ -133,4 +133,3 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
   }
   return _default;
 });
-//# sourceMappingURL=page-builder-mixin.js.map
