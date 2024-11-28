@@ -1,6 +1,6 @@
 /*eslint-disable */
 /* jscs:disable */
-define(["jquery", "mage/utils/wrapper", "Magento_PageBuilder/js/events", "Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry"], function (_jquery, _wrapper, _events, _registry) {
+define(["jquery", "knockout", "mage/utils/wrapper", "Magento_PageBuilder/js/events", "Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry"], function (_jquery, _knockout, _wrapper, _events, _registry) {
   function applyTemplateInline(modelData, preview, event, ui) {
     // If the container content type can't receive drops we need to cancel the operation
     if (!preview.isContainer()) {
@@ -15,7 +15,7 @@ define(["jquery", "mage/utils/wrapper", "Magento_PageBuilder/js/events", "Bounds
     var model = modelData.model;
     var contentType = preview.contentType;
     _events.trigger("stage:" + modelData.stage.id + ":template:apply", {
-      model: model,
+      modelData: modelData,
       index: index,
       contentType: contentType
     });
@@ -30,10 +30,11 @@ define(["jquery", "mage/utils/wrapper", "Magento_PageBuilder/js/events", "Bounds
         }
         applyTemplateInline.call(this, modelData, preview, arguments[1], arguments[2]);
       });
-      options.stop = _wrapper.wrap(options.stop, function (superFunction, event) {
+      options.stop = _wrapper.wrap(options.stop, function (superFunction, event, ui) {
         var target = event.originalEvent.target;
         if (target.classList.contains('bf__pb_drop-zone')) {
-          preview.onTemplate();
+          var contentType = _knockout.dataFor(ui.item[0]);
+          contentType.preview.onTemplate();
         }
         return superFunction();
       });

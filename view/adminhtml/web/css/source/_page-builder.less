@@ -1,0 +1,24 @@
+.pagebuilder-stage-wrapper {
+    .icon-pagebuilder-template {
+        &:before {
+            &:extend(.icomoon-insert-template:before);
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .template-buttons {
+        display: flex;
+        justify-content: flex-end;
+        align-items: end;
+
+        .icon-pagebuilder-template {
+            display: inline-block;
+            font-size: 2rem;
+            color: @color-white;
+            padding: @indent__s @indent__s * 2;
+        }
+    }
+}

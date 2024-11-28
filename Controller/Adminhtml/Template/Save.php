@@ -38,7 +38,7 @@ class Save implements HttpPostActionInterface
 
     public function execute()
     {
-        /** @var \stdClass $data */
+        /** @var \array $data */
         $data = $this->serializer->unserialize(file_get_contents('php://input'));
 
         $name = (string)$data[TemplateInlineInterface::KEY_NAME];

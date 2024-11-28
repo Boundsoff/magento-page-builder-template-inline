@@ -1,6 +1,6 @@
 /*eslint-disable */
 /* jscs:disable */
-define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/events", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html", "Magento_PageBuilder/js/acl", "Boundsoff_PageBuilderTemplateInline/js/acl"], function (html2canvas, _translate, _config, _uiRegistry, _events, _confirmAlert, _templateManagerSave, _saveContentModal, _acl, _acl2) {
+define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiRegistry", "Magento_PageBuilder/js/events", "Magento_PageBuilder/js/modal/confirm-alert", "Magento_PageBuilder/js/modal/template-manager-save", "text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html", "Magento_PageBuilder/js/acl", "Boundsoff_PageBuilderTemplateInline/js/acl", "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager/empty-preview-image"], function (html2canvas, _translate, _config, _uiRegistry, _events, _confirmAlert, _templateManagerSave, _saveContentModal, _acl, _acl2, _emptyPreviewImage) {
   function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
   // @ts-ignore
   // @ts-ignore
@@ -10,7 +10,14 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
 
     function TemplateInlineManager() {}
     TemplateInlineManager.createCapture = function createCapture(preview) {
-      var element = preview.wrapperElement;
+      var element = function () {
+        switch (preview.config.name) {
+          case "column":
+            return preview.element[0];
+          default:
+            return preview.wrapperElement;
+        }
+      }();
       var stageElement = document.getElementById(preview.contentType.stageId);
       stageElement.classList.add('capture');
       stageElement.classList.add('interacting');
@@ -25,7 +32,7 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
         stageElement.classList.remove('capture');
         stageElement.classList.remove('interacting');
         console.error(error);
-        return '';
+        return _emptyPreviewImage.emptyPreviewImage;
       });
     };
     TemplateInlineManager.saveAs = function saveAs(preview, component_data) {
@@ -108,8 +115,9 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
                 created_for: created_for,
                 component_data: component_data
               });
+              var errorMessage = error.message || (0, _translate)("An issue occurred while attempting to save " + "the template, please try again.");
               (0, _confirmAlert)({
-                content: error.message || (0, _translate)("An issue occurred while attempting to save " + "the template, please try again."),
+                content: "<pre>" + errorMessage + "</pre>",
                 title: (0, _translate)("An error occurred")
               });
               throw error;
@@ -131,5 +139,6 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
     };
     return TemplateInlineManager;
   }();
+  TemplateInlineManager.SupportedContentTypes = new Set(["block", "image", "row", "text", "column", "column-group", "heading", "products", "video", "tabs", "banner", "slider", "buttons", "map", "html"]);
   return TemplateInlineManager;
 });

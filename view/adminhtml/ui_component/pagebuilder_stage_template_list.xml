@@ -30,7 +30,21 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
-        <filterSearch name="fulltext"/> <!-- @todo -->
+        <filterSearch name="fulltext">
+            <settings>
+                <placeholder translate="true">Search</placeholder>
+            </settings>
+        </filterSearch>
+        <filters name="listing_filters">
+            <filterSelect name="created_for" provider="${ $.parentName }">
+                <settings>
+                    <captionValue>any</captionValue>
+                    <options class="Magento\PageBuilder\Model\Template\Source\TemplateTypes"/>
+                    <label translate="true">Created For</label>
+                    <dataScope>created_for</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
     </listingToolbar>
     <columns name="columns">
         <argument name="data" xsi:type="array">
@@ -92,8 +106,7 @@
                             <confirm>
                                 <title translate="true">Delete template</title>
                                 <message translate="true">
-                                    This template will be deleted permanently,
-                                    do U want to continue?
+                                    This template will be deleted permanently, do U want to continue?
                                 </message>
                             </confirm>
                             <callback>

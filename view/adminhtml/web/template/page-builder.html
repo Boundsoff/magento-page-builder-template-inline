@@ -14,9 +14,13 @@
                 if="shouldShowDropZone"
                 class="bf__pb_drop-zone"
                 data-bind="event: { mouseover: onMouseTemplateZone, mouseout: onMouseTemplateZone }"
-                text="Drop to create template"
-            ></p>
-            <span ifnot="shouldShowDropZone" class="bf__pb_icons_emoji" attr="{title: $t('Templates')}" click="toggleTemplateList">📝</span>
+            ><!-- ko text: 'Drop to create template' --><!-- /ko --></p>
+            <i
+                ifnot="shouldShowDropZone"
+                class="icon-pagebuilder-template"
+                attr="{title: $t('Templates')}"
+                click="toggleTemplateList"
+            ></i>
             <i click="toggleFullScreen.bind($data, {animate:true})"
                css="'icon-pagebuilder-fullscreen': !isFullScreen(), 'icon-pagebuilder-fullscreen-exit': isFullScreen()"
                attr="{title: isFullScreen() ? $t('Close Full Screen') : $t('Open in Full Screen')}">

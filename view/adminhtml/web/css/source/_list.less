@@ -1,6 +1,12 @@
 .template-inline {
     &.list-items {
         list-style: none;
+
+        .list-item:not(:last-child) {
+            border-bottom: 1px solid @border__color;
+            padding-bottom: @indent__m;
+            margin-bottom: @indent__m;
+        }
     }
 
     & .item-info {
@@ -18,6 +24,21 @@
 
                 &:after {
                     content: ':';
+                }
+            }
+        }
+
+        .action-menu-item {
+            &:hover {
+                cursor: pointer;
+            }
+
+            &.delete {
+                color: @color-tomato-brick;
+
+                &:before {
+                    &:extend(.icomoon-bin2:before);
+                    padding-right: 0.3em;
                 }
             }
         }

@@ -13,12 +13,39 @@ import templateManagerSave from "Magento_PageBuilder/js/modal/template-manager-s
 import promptContentTmpl from 'text!Magento_PageBuilder/template/modal/template-manager/save-content-modal.html';
 import {isAllowed} from "Magento_PageBuilder/js/acl";
 import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
+import {emptyPreviewImage} from "Boundsoff_PageBuilderTemplateInline/js/template-inline-manager/empty-preview-image";
+import Preview from "Magento_PageBuilder/js/content-type/column/preview";
 
 type TemplateSaveResponse = { success: boolean, message?: String }
 
 export default class TemplateInlineManager {
+    static SupportedContentTypes = new Set([
+        "block",
+        "image",
+        "row",
+        "text",
+        "column",
+        "column-group",
+        "heading",
+        "products",
+        "video",
+        "tabs",
+        "banner",
+        "slider",
+        "buttons",
+        "map",
+        "html",
+    ]);
+
     public static createCapture(preview: PreviewInterface): Html2CanvasPromise<String> {
-        const element = preview.wrapperElement as HTMLElement;
+        const element: HTMLElement = (() => {
+            switch (preview.config.name) {
+                case "column":
+                    return (<Preview>preview).element[0];
+                default:
+                    return <HTMLElement>preview.wrapperElement;
+            }
+        })();
 
         const stageElement = document.getElementById(preview.contentType.stageId);
         stageElement.classList.add('capture');
@@ -39,7 +66,7 @@ export default class TemplateInlineManager {
                 stageElement.classList.remove('interacting');
 
                 console.error(error);
-                return '';
+                return emptyPreviewImage;
             })
     }
 
@@ -111,9 +138,10 @@ export default class TemplateInlineManager {
                         })
                         .catch(error => {
                             events.trigger('templates:save:error', {error, name, created_for, component_data});
+                            const errorMessage = error.message || $t("An issue occurred while attempting to save " +
+                                "the template, please try again.");
                             alertDialog({
-                                content: error.message || $t("An issue occurred while attempting to save " +
-                                    "the template, please try again."),
+                                content: `<pre>${errorMessage}</pre>`,
                                 title: $t("An error occurred"),
                             });
 

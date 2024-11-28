@@ -11,8 +11,23 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="pagebuilder_stage_template_list_data_source" xsi:type="string">\Boundsoff\PageBuilderTemplateInline\Model\ResourceModel\TemplateInline\Grid\Collection</item>
+                <item name="pagebuilder_stage_template_list_data_source" xsi:type="string">
+                    \Boundsoff\PageBuilderTemplateInline\Model\ResourceModel\TemplateInline\Grid\Collection
+                </item>
             </argument>
         </arguments>
     </type>
+    <type name="Laminas\Validator\ValidatorChain">
+        <plugin name="flat_messages"
+                type="Boundsoff\PageBuilderTemplateInline\Plugin\ValidatorFlatMessages"/>
+    </type>
+
+    <virtualType name="\Boundsoff\PageBuilderTemplateInline\Model\Validator\AlreadyExistsValidator\Name"
+                 type="\Boundsoff\PageBuilderTemplateInline\Model\Validator\AlreadyExistsValidator">
+        <arguments>
+            <argument name="propertyName" xsi:type="const">
+                \Boundsoff\PageBuilderTemplateInline\Api\Data\TemplateInlineInterface::KEY_NAME
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
