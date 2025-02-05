@@ -1,31 +1,32 @@
 {
-    "name": "boundsoff/module-page-builder-template-inline",
-    "description": "Magento 2 module for page builder to save and apply templates with each block",
-    "type": "magento2-module",
-    "keywords": ["magento", "pagebuilder", "cms", "adobe commerce"],
-    "homepage": "https://github.com/none-life/magento-page-builder-template-inline",
-    "license": "MIT",
-    "dist": {
-        "url": "https://github.com/none-life/magento-page-builder-template-inline/releases/download/v1.0.0/dist.zip",
-        "type": "zip"
-    },
-    "authors": [
-        {
-            "name": "Kamil Wiśniowski",
-            "email": "kwisniowski@boundsoff.com"
-        }
-    ],
-    "require": {
-        "php": "^8.1",
-        "magento/page-builder": "1.7.*"
-    },
-    "autoload": {
-        "files": [
-            "registration.php"
-        ],
-        "psr-4": {
-            "Boundsoff\\PageBuilderTemplateInline\\": ""
-        }
+  "name": "boundsoff/module-page-builder-template-inline",
+  "description": "Magento 2 module for page builder to save and apply templates with each block",
+  "type": "magento2-module",
+  "keywords": [
+    "magento",
+    "pagebuilder",
+    "cms",
+    "adobe commerce"
+  ],
+  "homepage": "https://github.com/none-life/magento-page-builder-template-inline",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Kamil Wiśniowski",
+      "email": "kwisniowski@boundsoff.com"
     }
+  ],
+  "require": {
+    "magento/page-builder": "^1.7.4"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Boundsoff\\PageBuilderTemplateInline\\": ""
+    }
+  }
 }
 
