@@ -57,6 +57,7 @@ class Save implements HttpPostActionInterface
     public function execute()
     {
         /** @var \array $data */
+        // @phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
         $data = $this->serializer->unserialize(file_get_contents('php://input'));
 
         $name = (string)$data[TemplateInlineInterface::KEY_NAME];
@@ -125,7 +126,7 @@ class Save implements HttpPostActionInterface
         // Prepare the image data
         $imgData = str_replace(' ', '+', $previewImage);
         $imgData = substr($imgData, strpos($imgData, ",") + 1);
-        // phpcs:ignore
+        // @phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
         $decodedImage = base64_decode($imgData);
 
         $imageProperties = getimagesizefromstring($decodedImage);

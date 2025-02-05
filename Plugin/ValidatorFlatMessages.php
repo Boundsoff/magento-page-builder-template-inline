@@ -11,6 +11,7 @@ class ValidatorFlatMessages
      *
      * @param ValidatorChain $subject
      * @param array $result
+     * @noinspection PhpUnusedParameterInspection
      */
     public function afterGetMessages(ValidatorChain $subject, $result)
     {
