@@ -13,6 +13,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Image\AdapterFactory;
@@ -21,6 +23,18 @@ use Psr\Log\LoggerInterface;
 
 class Save implements HttpPostActionInterface
 {
+    /**
+     * @param TemplateInlineRepositoryInterface $templateInlineRepository
+     * @param RequestInterface $request
+     * @param ResultFactory $resultFactory
+     * @param Escaper $escaper
+     * @param Filesystem $filesystem
+     * @param ImageContentValidator $imageContentValidator
+     * @param ImageContentFactory $imageContentFactory
+     * @param AdapterFactory $imageAdapterFactory
+     * @param LoggerInterface $logger
+     * @param SerializerInterface $serializer
+     */
     public function __construct(
         protected readonly TemplateInlineRepositoryInterface $templateInlineRepository,
         protected readonly RequestInterface                  $request,
@@ -32,10 +46,14 @@ class Save implements HttpPostActionInterface
         protected readonly AdapterFactory                    $imageAdapterFactory,
         protected readonly LoggerInterface                   $logger,
         protected readonly SerializerInterface               $serializer,
-    )
-    {
+    ) {
     }
 
+    /**
+     * Create or updates the template inline
+     *
+     * @return \Magento\Framework\App\ResponseInterface|Json|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         /** @var \array $data */
@@ -45,8 +63,6 @@ class Save implements HttpPostActionInterface
         $previewImage = (string)$data[TemplateInlineInterface::KEY_PREVIEW_IMAGE];
         $createdFor = (string)$data[TemplateInlineInterface::KEY_CREATED_FOR];
         $componentData = (array)$data[TemplateInlineInterface::KEY_COMPONENT_DATA];
-
-        // @todo escaper is causing issues with structure data
 
         $templateInline = $this->templateInlineRepository->new();
         $templateInline->setName($name);
@@ -91,19 +107,20 @@ class Save implements HttpPostActionInterface
     /**
      * Handle storing the preview image
      *
-     * @param RequestInterface $request
-     * @return string
+     * @param string $previewImage
+     * @param string $name
+     * @return string|null
      * @throws LocalizedException
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws FileSystemException
+     * @throws InputException
      */
     private function storePreviewImage(string $previewImage, string $name): ?string
     {
-        $fileName = preg_replace("/[^A-Za-z0-9]/", '', str_replace(
-                ' ',
-                '-',
-                strtolower($name)
-            )) . '_' . uniqid() . '.jpg';
+        $fileName = preg_replace(
+            "/[^A-Za-z0-9]/",
+            '',
+            str_replace(' ', '-', strtolower($name)),
+        ) . '_' . uniqid() . '.jpg';
 
         // Prepare the image data
         $imgData = str_replace(' ', '+', $previewImage);

@@ -7,8 +7,10 @@ use Laminas\Validator\ValidatorChain;
 class ValidatorFlatMessages
 {
     /**
+     * Adjust messages to be flat in order to process them correctly
+     *
      * @param ValidatorChain $subject
-     * @param $result
+     * @param array $result
      */
     public function afterGetMessages(ValidatorChain $subject, $result)
     {
