@@ -8,6 +8,7 @@ use Magento\Framework\UrlInterface;
 
 class StageConfig
 {
+    const ROUTE_PATH = 'Boundsoff_PageBuilderTemplateInline/template/save';
 
     /**
      * @param UrlInterface $urlBuilder
@@ -29,9 +30,7 @@ class StageConfig
      */
     public function afterGetConfig($subject, $result)
     {
-        $result['bf__template_save_url'] = $this->urlBuilder->getUrl(
-            'Boundsoff_PageBuilderTemplateInline/template/save'
-        );
+        $result['bf__template_save_url'] = $this->urlBuilder->getUrl(static::ROUTE_PATH);
 
         foreach (ConfigAcl::cases() as $case) {
             $result['acl'][strtolower($case->name)] = $this->authorization->isAllowed($case->value);
