@@ -6,6 +6,7 @@ use Boundsoff\PageBuilderTemplateInline\Api\Data\TemplateInlineInterface;
 use Boundsoff\PageBuilderTemplateInline\Api\Data\TemplateInlineSearchResultsInterface;
 use Boundsoff\PageBuilderTemplateInline\Api\Data\TemplateInlineSearchResultsInterfaceFactory;
 use Boundsoff\PageBuilderTemplateInline\Api\TemplateInlineRepositoryInterface;
+use Boundsoff\PageBuilderTemplateInline\Model\ResourceModel\TemplateInline as ResourceModel;
 use Boundsoff\PageBuilderTemplateInline\Model\ResourceModel\TemplateInline\Collection;
 use Boundsoff\PageBuilderTemplateInline\Model\ResourceModel\TemplateInline\CollectionFactory;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -18,15 +19,25 @@ use Magento\Framework\Exception\NotFoundException;
 
 class TemplateInlineRepository implements TemplateInlineRepositoryInterface
 {
+    /**
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param CollectionFactory $collectionFactory
+     * @param TemplateInlineSearchResultsInterfaceFactory $searchResultsFactory
+     * @param ResourceModel $resource
+     */
     public function __construct(
-        protected CollectionProcessorInterface                $collectionProcessor,
-        protected SearchCriteriaBuilder                       $searchCriteriaBuilder,
-        protected CollectionFactory                           $collectionFactory,
-        protected TemplateInlineSearchResultsInterfaceFactory $searchResultsFactory,
-    )
-    {
+        protected readonly CollectionProcessorInterface                $collectionProcessor,
+        protected readonly SearchCriteriaBuilder                       $searchCriteriaBuilder,
+        protected readonly CollectionFactory                           $collectionFactory,
+        protected readonly TemplateInlineSearchResultsInterfaceFactory $searchResultsFactory,
+        protected readonly ResourceModel                               $resource,
+    ) {
     }
 
+    /**
+     * @inheritdoc
+     */
     public function new(): TemplateInlineInterface
     {
         /** @var Collection $collection */
@@ -35,6 +46,9 @@ class TemplateInlineRepository implements TemplateInlineRepositoryInterface
         return $collection->getNewEmptyItem();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getById(int $modelId): ?TemplateInlineInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder
@@ -48,16 +62,16 @@ class TemplateInlineRepository implements TemplateInlineRepositoryInterface
     }
 
     /**
-     * @throws AlreadyExistsException
+     * @inheritdoc
      */
     public function save(TemplateInlineInterface $model): void
     {
-        /** @var Collection $collection */
-        $collection = $this->collectionFactory->create();
-        $collection->getResource()
-            ->save($model);
+        $this->resource->save($model);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->collectionFactory->create();
@@ -70,6 +84,9 @@ class TemplateInlineRepository implements TemplateInlineRepositoryInterface
         return $searchResults;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function deleteById(int $modelId): void
     {
         $collection = $this->collectionFactory->create();
@@ -80,7 +97,6 @@ class TemplateInlineRepository implements TemplateInlineRepositoryInterface
 
             throw NoSuchEntityException::singleField($fieldName, $modelId);
         }
-        $collection->getResource()
-            ->delete($model);
+        $this->resource->delete($model);
     }
 }

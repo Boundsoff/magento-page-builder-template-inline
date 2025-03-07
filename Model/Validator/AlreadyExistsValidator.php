@@ -10,17 +10,18 @@ use Magento\Framework\Validator\AbstractValidator;
 class AlreadyExistsValidator extends AbstractValidator
 {
 
+    /**
+     * @param string $propertyName
+     * @param ObjectManagerInterface $objectManager
+     */
     public function __construct(
         protected readonly string                 $propertyName,
         protected readonly ObjectManagerInterface $objectManager,
-    )
-    {
-
+    ) {
     }
 
     /**
-     * @param AbstractModel $value
-     * @return boolean
+     * @inheritdoc
      */
     public function isValid($value)
     {

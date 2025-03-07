@@ -21,10 +21,14 @@ class Delete implements HttpGetActionInterface
         protected readonly ResultFactory                     $resultFactory,
         protected readonly TemplateInlineRepositoryInterface $templateInlineRepository,
         protected readonly LoggerInterface                   $logger,
-    )
-    {
+    ) {
     }
 
+    /**
+     * Delete template by its id
+     *
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+     */
     public function execute()
     {
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);

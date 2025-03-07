@@ -10,13 +10,19 @@ use Magento\Framework\Exception\LocalizedException;
 
 class CheckModelAcl implements ObserverInterface
 {
-    public function __construct(protected readonly AuthorizationInterface $authorization)
-    {
+    /**
+     * @param AuthorizationInterface $authorization
+     */
+    public function __construct(
+        protected readonly AuthorizationInterface $authorization,
+    ) {
     }
 
-
     /**
+     * Check ACL permission for the actions
+     *
      * @throws LocalizedException
+     * @inheritdoc
      */
     public function execute(Observer $observer)
     {
