@@ -9,24 +9,37 @@ use Magento\Framework\Validator\Factory;
 
 class TemplateInline extends AbstractDb
 {
+    /**
+     * @var array[]
+     */
     protected $_serializableFields = [
         TemplateInlineInterface::KEY_COMPONENT_DATA => [[], '{}'],
     ];
 
+    /**
+     * @param Context $context
+     * @param Factory $validatorFactory
+     * @param string $connectionName
+     */
     public function __construct(
-        Context           $context,
+        Context                    $context,
         protected readonly Factory $validatorFactory,
-                          $connectionName = null,
-    )
-    {
+        $connectionName = null
+    ) {
         parent::__construct($context, $connectionName);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function _construct()
     {
         $this->_init('bf__pb_template_inline', TemplateInlineInterface::KEY_MODEL_ID);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getValidationRulesBeforeSave()
     {
         $builder = $this->validatorFactory->createValidatorBuilder('template_inline', 'resourceModel');

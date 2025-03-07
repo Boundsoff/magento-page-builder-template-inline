@@ -10,6 +10,10 @@ class StageConfig
 {
     const ROUTE_PATH = 'Boundsoff_PageBuilderTemplateInline/template/save';
 
+    /**
+     * @param UrlInterface $urlBuilder
+     * @param AuthorizationInterface $authorization
+     */
     public function __construct(
         protected readonly UrlInterface $urlBuilder,
         protected readonly AuthorizationInterface $authorization,
@@ -17,6 +21,8 @@ class StageConfig
     }
 
     /**
+     * Adding controller url and acl resources to the page builder stage config
+     *
      * @param \Magento\PageBuilder\Model\Stage\Config $subject
      * @param array $result
      * @return array

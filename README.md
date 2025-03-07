@@ -1,7 +1,15 @@
 # Magento Page builder / Template inline
 
+Getting the templates from any element in the page builder.
 While templates with page builder can be applied only for whole page
 by installing this package U will have option to add each separate element.
+
+## Side panel with inline templates
+With the icon for the temples U have now the side panel with the list of templates U can search for them and categories them.
+![first-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/master/.readme/img/one.png?raw=true)
+## Drag and drop inline template anywhere
+When found given template and put in the content it will be place in that place, any save information with the viewport data will be put in there and rendered.
+![second-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/master/.readme/img/two.png?raw=true)
 
 ## Features
 
@@ -14,15 +22,15 @@ same as creation of new element on left panel
 
 ## Installation
 
-#### Download module
+#### Download
 ```shell
 composer require boundsoff/module-page-builder-template-inline
 ```
-#### Enable module for Magento
+#### Enable module
 ```shell
 php bin/magento module:enable Boundsoff_PageBuilderTemplateInline --clear-static-content
 ```
-#### Install module with models
+#### Install
 ```shell
 php bin/magento setup:upgrade
 ```
