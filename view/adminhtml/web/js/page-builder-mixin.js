@@ -2,7 +2,7 @@
 /* jscs:disable */
 function _inheritsLoose(t, o) { t.prototype = Object.create(o.prototype), t.prototype.constructor = t, _setPrototypeOf(t, o); }
 function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
-define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-factory", "Magento_PageBuilder/js/acl", "Boundsoff_PageBuilderTemplateInline/js/acl", "Magento_Ui/js/modal/alert", "knockout", "Magento_PageBuilder/js/content-type/column/resize", "Magento_PageBuilder/js/content-type/column-group/factory", "Magento_PageBuilder/js/config", "Magento_PageBuilder/js/content-type/column-group/grid-size"], function (_events, _contentTypeFactory, _acl, _acl2, _alert, _knockout, _resize, _factory, _config, _gridSize) {
+define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-factory", "Magento_PageBuilder/js/acl", "Boundsoff_PageBuilderTemplateInline/js/acl", "Magento_Ui/js/modal/alert", "knockout", "Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry", "Magento_PageBuilder/js/content-type/column/resize", "Magento_PageBuilder/js/content-type/column-group/factory", "Magento_PageBuilder/js/config", "Magento_PageBuilder/js/content-type/column-group/grid-size"], function (_events, _contentTypeFactory, _acl, _acl2, _alert, _knockout, _registry, _resize, _factory, _config, _gridSize) {
   function _default(base) {
     return /*#__PURE__*/function (_base) {
       "use strict";
@@ -11,11 +11,26 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
         var _this;
         _this = _base.call(this, config, initialValue) || this;
         _this.template = 'Boundsoff_PageBuilderTemplateInline/page-builder';
+        _this.shouldShowDropZone = _knockout.observable(false);
         _this.canApplyInlineTemplates = (0, _acl.isAllowed)(_acl2.resources.TEMPLATE_INLINE_APPLY);
         _this.isStageReady.subscribe(function () {
-          _this.shouldShowDropZone = _knockout.computed(function () {
-            return _this.stage.interacting() && _this.canApplyInlineTemplates;
-          });
+          if (_this.canApplyInlineTemplates) {
+            _events.on("stage:sortable:start", function () {
+              var modelData = (0, _registry.getDraggedTemplateModelData)();
+              if (!modelData) {
+                return _this.shouldShowDropZone(true);
+              }
+            });
+            _events.on("stage:sortable:end", function () {
+              return _this.shouldShowDropZone(false);
+            });
+            _events.on("stage:sortable:receive", function () {
+              return _this.shouldShowDropZone(false);
+            });
+            _events.on("stage:sortable:deactivate", function () {
+              return _this.shouldShowDropZone(false);
+            });
+          }
         });
         return _this;
       }
@@ -133,3 +148,4 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
   }
   return _default;
 });
+//# sourceMappingURL=page-builder-mixin.js.map

@@ -48,3 +48,4 @@ define(["mage/translate", "Magento_PageBuilder/js/content-type-menu/option", "Ma
   }
   return _default;
 });
+//# sourceMappingURL=preview-mixin.js.map

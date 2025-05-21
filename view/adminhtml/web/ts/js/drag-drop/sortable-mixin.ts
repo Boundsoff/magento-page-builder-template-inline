@@ -31,6 +31,11 @@ export default function (sortable: { getSortableOptions: Function }) {
     sortable.getSortableOptions = wrapper.wrap(sortable.getSortableOptions, function (superFunction: Function, preview: PreviewExtended): JQueryUI.SortableOptions | any {
         const options = superFunction(preview);
 
+        options.start = wrapper.wrap(options.start, function(superFunction: Function) {
+            events.trigger(`stage:sortable:start`);
+            return superFunction();
+        });
+
         options.receive = wrapper.wrap(options.receive, function (superFunction: Function) {
             const modelData = getDraggedTemplateModelData();
             if (!modelData) {
@@ -38,6 +43,12 @@ export default function (sortable: { getSortableOptions: Function }) {
             }
 
             applyTemplateInline.call(this, modelData, preview, arguments[1], arguments[2]);
+            events.trigger(`stage:sortable:receive`);
+        });
+
+        options.deactivate = wrapper.wrap(options.deactivate ?? (() => {}), function (superFunction: Function) {
+            events.trigger(`stage:sortable:deactivate`);
+            return superFunction();
         });
 
         options.stop = wrapper.wrap(options.stop, function (superFunction: Function, event: { originalEvent?: Event }, ui: JQueryUI.SortableUIParams) {
@@ -47,6 +58,7 @@ export default function (sortable: { getSortableOptions: Function }) {
                 (<PreviewExtended>contentType.preview).onTemplate();
             }
 
+            events.trigger(`stage:sortable:stop`);
             return superFunction();
         });
 

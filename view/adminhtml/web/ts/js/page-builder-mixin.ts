@@ -8,7 +8,7 @@ import {isAllowed} from "Magento_PageBuilder/js/acl";
 import {resources} from "Boundsoff_PageBuilderTemplateInline/js/acl";
 import alertDialog from "Magento_Ui/js/modal/alert";
 import ko from 'knockout'
-import {ModelData} from "Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry";
+import {getDraggedTemplateModelData, ModelData} from "Boundsoff_PageBuilderTemplateInline/js/drag-drop/registry";
 import {updateColumnWidth} from "Magento_PageBuilder/js/content-type/column/resize";
 import ColumnPreview from "Magento_PageBuilder/js/content-type/column/preview";
 import {createColumnLine} from "Magento_PageBuilder/js/content-type/column-group/factory";
@@ -31,7 +31,7 @@ type TemplateContentType =
 export default function (base: typeof PageBuilder) {
     return class PageBuilderMixin extends base {
         public template: string = 'Boundsoff_PageBuilderTemplateInline/page-builder'
-        public shouldShowDropZone: KnockoutComputed<boolean>;
+        public shouldShowDropZone: KnockoutObservable<boolean> = ko.observable(false);
         protected readonly canApplyInlineTemplates: boolean;
 
         constructor(config: any, initialValue: string) {
@@ -39,9 +39,17 @@ export default function (base: typeof PageBuilder) {
 
             this.canApplyInlineTemplates = isAllowed(resources.TEMPLATE_INLINE_APPLY);
             this.isStageReady.subscribe(() => {
-                this.shouldShowDropZone = ko.computed(() => {
-                    return this.stage.interacting() && this.canApplyInlineTemplates;
-                });
+                if (this.canApplyInlineTemplates) {
+                    events.on(`stage:sortable:start`, () => {
+                        const modelData = getDraggedTemplateModelData();
+                        if (!modelData) {
+                            return this.shouldShowDropZone(true);
+                        }
+                    });
+                    events.on(`stage:sortable:end`, () => this.shouldShowDropZone(false));
+                    events.on(`stage:sortable:receive`, () => this.shouldShowDropZone(false));
+                    events.on(`stage:sortable:deactivate`, () => this.shouldShowDropZone(false));
+                }
             })
         }
 
