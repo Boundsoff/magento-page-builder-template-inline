@@ -18,7 +18,8 @@
     }
   ],
   "require": {
-    "magento/page-builder": "^1.7.4"
+    "magento/page-builder": "^1.7.4",
+    "boundsoff/module-brand-news": "^1.0.0"
   },
   "autoload": {
     "files": [
