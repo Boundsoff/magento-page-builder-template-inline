@@ -40,9 +40,11 @@ export default function (base: typeof PageBuilder) {
             this.canApplyInlineTemplates = isAllowed(resources.TEMPLATE_INLINE_APPLY);
             this.isStageReady.subscribe(() => {
                 if (this.canApplyInlineTemplates) {
-                    events.on(`stage:sortable:start`, () => {
-                        const modelData = getDraggedTemplateModelData();
-                        if (!modelData) {
+                    events.on(`stage:sortable:start`, ({ui}: { ui: { item: JQuery } }) => {
+                        const modelData = !!getDraggedTemplateModelData();
+                        const isContentType = ui.item.hasClass('pagebuilder-draggable-content-type');
+
+                        if (!modelData && !isContentType) {
                             return this.shouldShowDropZone(true);
                         }
                     });

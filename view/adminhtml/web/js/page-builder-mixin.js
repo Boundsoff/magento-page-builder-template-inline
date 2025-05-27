@@ -15,9 +15,11 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
         _this.canApplyInlineTemplates = (0, _acl.isAllowed)(_acl2.resources.TEMPLATE_INLINE_APPLY);
         _this.isStageReady.subscribe(function () {
           if (_this.canApplyInlineTemplates) {
-            _events.on("stage:sortable:start", function () {
-              var modelData = (0, _registry.getDraggedTemplateModelData)();
-              if (!modelData) {
+            _events.on("stage:sortable:start", function (_ref) {
+              var ui = _ref.ui;
+              var modelData = !!(0, _registry.getDraggedTemplateModelData)();
+              var isContentType = ui.item.hasClass('pagebuilder-draggable-content-type');
+              if (!modelData && !isContentType) {
                 return _this.shouldShowDropZone(true);
               }
             });
@@ -56,11 +58,11 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
       _proto.onMouseTemplateZone = function onMouseTemplateZone(self, $event) {
         $event.type === 'mouseover' ? $event.target.classList.add('active') : $event.target.classList.remove('active');
       };
-      _proto.templateApply = function templateApply(_ref) {
+      _proto.templateApply = function templateApply(_ref2) {
         var _this3 = this;
-        var modelData = _ref.modelData,
-          index = _ref.index,
-          contentType = _ref.contentType;
+        var modelData = _ref2.modelData,
+          index = _ref2.index,
+          contentType = _ref2.contentType;
         if (!this.canApplyInlineTemplates) {
           (0, _alert)({
             content: $t("You do not have permission to apply inline templates."),
@@ -148,4 +150,3 @@ define(["Magento_PageBuilder/js/events", "Magento_PageBuilder/js/content-type-fa
   }
   return _default;
 });
-//# sourceMappingURL=page-builder-mixin.js.map

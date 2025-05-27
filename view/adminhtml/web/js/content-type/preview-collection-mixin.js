@@ -36,4 +36,3 @@ define(["Magento_PageBuilder/js/config"], function (_config) {
   }
   return _default;
 });
-//# sourceMappingURL=preview-collection-mixin.js.map

@@ -24,8 +24,11 @@ define(["jquery", "knockout", "mage/utils/wrapper", "Magento_PageBuilder/js/even
     sortable.getSortableOptions = _wrapper.wrap(sortable.getSortableOptions, function (superFunction, preview) {
       var _options$deactivate;
       var options = superFunction(preview);
-      options.start = _wrapper.wrap(options.start, function (superFunction) {
-        _events.trigger("stage:sortable:start");
+      options.start = _wrapper.wrap(options.start, function (superFunction, event, ui) {
+        _events.trigger("stage:sortable:start", {
+          event: event,
+          ui: ui
+        });
         return superFunction();
       });
       options.receive = _wrapper.wrap(options.receive, function (superFunction) {
@@ -55,4 +58,3 @@ define(["jquery", "knockout", "mage/utils/wrapper", "Magento_PageBuilder/js/even
   }
   return _default;
 });
-//# sourceMappingURL=sortable-mixin.js.map

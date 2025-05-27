@@ -29,4 +29,3 @@ define(["Magento_PageBuilder/js/events"], function (_events) {
   }
   return _default;
 });
-//# sourceMappingURL=preview-mixin.js.map
