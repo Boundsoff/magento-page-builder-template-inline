@@ -10,11 +10,11 @@ This package gives you the flexibility to customize specific elements, streamlin
 Add a side panel with a searchable, categorized list of templates, accessible via an icon,
 for applying templates to individual elements in your page builder, enhancing customization and workflow efficiency.
 
-![second-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/58-update-readme/.readme/img/created.gif?raw=true)
+![second-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/master/.readme/img/created.gif?raw=true)
 ## Drag and drop inline template anywhere
 Apply a selected template to a specific element in your page builder using a side panel with a searchable, categorized template list, accessible via an icon.
 The template’s content, including saved viewport data, is placed and rendered in the chosen element, enhancing customization and workflow efficiency.
-![first-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/58-update-readme/.readme/img/apply.gif?raw=true)
+![first-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/master/.readme/img/apply.gif?raw=true)
 
 ## Features
 
