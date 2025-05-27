@@ -1,24 +1,28 @@
-# Magento Page builder / Template inline
+# Page Builder / Template inline
 
-Getting the templates from any element in the page builder.
-While templates with page builder can be applied only for whole page
-by installing this package U will have option to add each separate element.
+![Version](https://shields.io/packagist/v/boundsoff/module-page-builder-template-inline) ![Downloads](https://shields.io/packagist/dt/boundsoff/module-page-builder-template-inline) ![PHP Version](https://shields.io/packagist/php-v/boundsoff/module-page-builder-template-inline) ![License](https://img.shields.io/packagist/l/boundsoff/module-page-builder-template-inline)
+
+
+Apply templates to individual elements in your page builder, not just entire pages.
+This package gives you the flexibility to customize specific elements, streamlining your workflow.
 
 ## Side panel with inline templates
-With the icon for the temples U have now the side panel with the list of templates U can search for them and categories them.
-![first-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/master/.readme/img/one.png?raw=true)
+Add a side panel with a searchable, categorized list of templates, accessible via an icon,
+for applying templates to individual elements in your page builder, enhancing customization and workflow efficiency.
+
+![second-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/58-update-readme/.readme/img/created.gif?raw=true)
 ## Drag and drop inline template anywhere
-When found given template and put in the content it will be place in that place, any save information with the viewport data will be put in there and rendered.
-![second-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/master/.readme/img/two.png?raw=true)
+Apply a selected template to a specific element in your page builder using a side panel with a searchable, categorized template list, accessible via an icon.
+The template’s content, including saved viewport data, is placed and rendered in the chosen element, enhancing customization and workflow efficiency.
+![first-preview](https://github.com/none-life/magento-page-builder-template-inline/blob/58-update-readme/.readme/img/apply.gif?raw=true)
 
 ## Features
 
-✅ **Drag & Drop** - u can drag block to create template with the drop zone and later applied same way by grab the image
+✅ **Drag & Drop** - Drag blocks to create templates using a drop zone, then apply them by dragging the template image.
 
-✅ **No Override** - those templates when applied they are place with indication where to add them,
-same as creation of new element on left panel
+✅ **No Override** - Templates are placed with clear indicators for insertion, mirroring the creation of new elements in the left panel.
 
-✅ **Legacy** - page templates are not modify, when upgrade Magento it won't cause any issues
+✅ **Legacy** - Compatible with Magento page templates, ensuring upgrades don’t cause issues.
 
 ## Installation
 
