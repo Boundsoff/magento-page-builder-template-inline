@@ -22,13 +22,26 @@ define(["jquery", "knockout", "mage/utils/wrapper", "Magento_PageBuilder/js/even
   }
   function _default(sortable) {
     sortable.getSortableOptions = _wrapper.wrap(sortable.getSortableOptions, function (superFunction, preview) {
+      var _options$deactivate;
       var options = superFunction(preview);
+      options.start = _wrapper.wrap(options.start, function (superFunction, event, ui) {
+        _events.trigger("stage:sortable:start", {
+          event: event,
+          ui: ui
+        });
+        return superFunction();
+      });
       options.receive = _wrapper.wrap(options.receive, function (superFunction) {
         var modelData = (0, _registry.getDraggedTemplateModelData)();
         if (!modelData) {
           return superFunction();
         }
         applyTemplateInline.call(this, modelData, preview, arguments[1], arguments[2]);
+        _events.trigger("stage:sortable:receive");
+      });
+      options.deactivate = _wrapper.wrap((_options$deactivate = options.deactivate) != null ? _options$deactivate : function () {}, function (superFunction) {
+        _events.trigger("stage:sortable:deactivate");
+        return superFunction();
       });
       options.stop = _wrapper.wrap(options.stop, function (superFunction, event, ui) {
         var target = event.originalEvent.target;
@@ -36,6 +49,7 @@ define(["jquery", "knockout", "mage/utils/wrapper", "Magento_PageBuilder/js/even
           var contentType = _knockout.dataFor(ui.item[0]);
           contentType.preview.onTemplate();
         }
+        _events.trigger("stage:sortable:stop");
         return superFunction();
       });
       return options;

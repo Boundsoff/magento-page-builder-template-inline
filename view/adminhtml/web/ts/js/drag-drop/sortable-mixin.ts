@@ -24,12 +24,17 @@ function applyTemplateInline(modelData: ModelData, preview: Preview, event: Even
 
     const model = modelData.model;
     const contentType = preview.contentType;
-    events.trigger(`stage:${modelData.stage.id}:template:apply`, { modelData, index, contentType });
+    events.trigger(`stage:${modelData.stage.id}:template:apply`, {modelData, index, contentType});
 }
 
 export default function (sortable: { getSortableOptions: Function }) {
     sortable.getSortableOptions = wrapper.wrap(sortable.getSortableOptions, function (superFunction: Function, preview: PreviewExtended): JQueryUI.SortableOptions | any {
         const options = superFunction(preview);
+
+        options.start = wrapper.wrap(options.start, function (superFunction: Function, event: Event, ui: Object) {
+            events.trigger(`stage:sortable:start`, {event, ui});
+            return superFunction();
+        });
 
         options.receive = wrapper.wrap(options.receive, function (superFunction: Function) {
             const modelData = getDraggedTemplateModelData();
@@ -38,15 +43,25 @@ export default function (sortable: { getSortableOptions: Function }) {
             }
 
             applyTemplateInline.call(this, modelData, preview, arguments[1], arguments[2]);
+            events.trigger(`stage:sortable:receive`);
         });
 
-        options.stop = wrapper.wrap(options.stop, function (superFunction: Function, event: { originalEvent?: Event }, ui: JQueryUI.SortableUIParams) {
+        options.deactivate = wrapper.wrap(options.deactivate ?? (() => {
+        }), function (superFunction: Function) {
+            events.trigger(`stage:sortable:deactivate`);
+            return superFunction();
+        });
+
+        options.stop = wrapper.wrap(options.stop, function (superFunction: Function, event: {
+            originalEvent?: Event
+        }, ui: JQueryUI.SortableUIParams) {
             const target = <HTMLElement>event.originalEvent.target;
             if (target.classList.contains('bf__pb_drop-zone')) {
                 const contentType: ContentTypeInterface = ko.dataFor(ui.item[0]);
                 (<PreviewExtended>contentType.preview).onTemplate();
             }
 
+            events.trigger(`stage:sortable:stop`);
             return superFunction();
         });
 
