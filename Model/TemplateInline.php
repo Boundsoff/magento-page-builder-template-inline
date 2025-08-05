@@ -5,7 +5,9 @@ namespace Boundsoff\PageBuilderTemplateInline\Model;
 use Boundsoff\PageBuilderTemplateInline\Api\Data\TemplateInlineInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Validator\Factory;
 
 class TemplateInline extends AbstractExtensibleModel implements TemplateInlineInterface
@@ -19,14 +21,14 @@ class TemplateInline extends AbstractExtensibleModel implements TemplateInlineIn
      * @inheritdoc
      */
     public function __construct(
-        \Magento\Framework\Model\Context                        $context,
-        \Magento\Framework\Registry                             $registry,
-        ExtensionAttributesFactory                              $extensionFactory,
-        AttributeValueFactory                                   $customAttributeFactory,
-        protected readonly Factory                              $validatorFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb           $resourceCollection = null,
-        array                                                   $data = []
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry      $registry,
+        ExtensionAttributesFactory       $extensionFactory,
+        AttributeValueFactory            $customAttributeFactory,
+        protected readonly Factory       $validatorFactory,
+        ?AbstractResource                $resource = null,
+        ?AbstractDb                      $resourceCollection = null,
+        array                            $data = []
     ) {
         parent::__construct(
             $context,
