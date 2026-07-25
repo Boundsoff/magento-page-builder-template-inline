@@ -8,7 +8,7 @@ use Magento\Framework\UrlInterface;
 
 class StageConfig
 {
-    const ROUTE_PATH = 'Boundsoff_PageBuilderTemplateInline/template/save';
+    public const ROUTE_PATH = 'Boundsoff_PageBuilderTemplateInline/template/save';
 
     /**
      * @param UrlInterface $urlBuilder

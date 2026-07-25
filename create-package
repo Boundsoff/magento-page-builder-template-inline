@@ -1,11 +1,13 @@
 #!/bin/bash
 
-zip -r boundsoff_page-builder-template-inline-1.0.0.zip ./ \
+zip -r boundsoff_page-builder-template-inline-1.0.2.zip ./ \
   -x './.git' \
   -x './page-builder-types/' \
   -x './**/.babelrc.js' \
   -x './**/babel/' \
   -x './**/*.js.map' \
+  -x './node_modules/' \
+  -x './.readme/**' \
   -x '.gitignore' \
   -x '.gitmodules' \
   -x 'create-package' \
