@@ -103,6 +103,13 @@ export default class TemplateInlineManager {
                 "data-validate": "{required:true}",
                 "maxlength": "255",
             },
+            keyEventHandlers: {
+                enterKey(event: Event) {
+                    event.preventDefault();
+                    this.submit();
+                    return false;
+                },
+            },
             actions: {
                 confirm(name: string, created_for: string) {
                     return capture
