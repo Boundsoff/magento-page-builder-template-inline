@@ -1,4 +1,5 @@
 {
+  "$schema": "https://getcomposer.org/schema.json",
   "name": "boundsoff/module-page-builder-template-inline",
   "description": "Magento 2 module for page builder to save and apply templates with each block",
   "type": "magento2-module",
@@ -10,7 +11,6 @@
   ],
   "homepage": "https://github.com/none-life/magento-page-builder-template-inline",
   "license": "MIT",
-  "version": "1.0.2",
   "authors": [
     {
       "name": "Kamil Wiśniowski",
@@ -18,7 +18,8 @@
     }
   ],
   "require": {
-    "magento/page-builder": "^1.7.4",
+    "php": "^8.4",
+    "magento/page-builder": "^1.7.5",
     "boundsoff/module-brand-news": "^1.0.1"
   },
   "autoload": {

@@ -71,6 +71,13 @@ define(["html2canvas", "mage/translate", "Magento_PageBuilder/js/config", "uiReg
           "data-validate": "{required:true}",
           "maxlength": "255"
         },
+        keyEventHandlers: {
+          enterKey: function enterKey(event) {
+            event.preventDefault();
+            this.submit();
+            return false;
+          }
+        },
         actions: {
           confirm: function confirm(name, created_for) {
             return capture.then(function (preview_image) {
